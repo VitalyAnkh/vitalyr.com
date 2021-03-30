@@ -1,4 +1,4 @@
-baseURL = ""
+baseURL = "vitalyr.com"
 defaultContentLanguage = "en"
 hasCJKLanguage = true
 languageCode = "en"
@@ -38,7 +38,7 @@ name = "vitalyr"
 [params]
   customCSS = []
   dateFormat = "2006-01-02"
-  description = "an example site for hugo theme TeXify"
+  description = "VitalyR's Blog Site"
   enableFullRSS = true
   enableHanEmph = true
   enableMathjax = true
