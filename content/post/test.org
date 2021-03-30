@@ -19,6 +19,4 @@ Formula.
 
 \(g(x)\)
 
-\(\matchscr{A}\)
-
 \(\mathscr{A}\)
