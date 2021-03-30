@@ -1,4 +1,4 @@
-baseURL = "vitalyr.netlify.app"
+baseURL = ""
 defaultContentLanguage = "en"
 hasCJKLanguage = true
 languageCode = "en"
