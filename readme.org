@@ -1,2 +1,2 @@
 #+title: VitalyR's Blog Site
-[[Netlify Status][https://api.netlify.com/api/v1/badges/252fa388-532e-4d55-b957-901838440a2f/deploy-status)](https://app.netlify.com/sites/vitalyr/deploys]]
+[[Netlify Status][https://api.netlify.com/api/v1/badges/252fa388-532e-4d55-b957-901838440a2f/deploy-status]][https://app.netlify.com/sites/vitalyr/deploys]
