@@ -4,7 +4,7 @@ date: 2021-03-30T11:22:22+08:00
 draft: false
 ---
 #+title: Test
-
+#+latex_header: \usepackage{mathrsfs}
 This is for Hugo site test.
 
 #+begin_src rust
@@ -14,4 +14,11 @@ fn main(){
 #+end_src>
 
 Formula.
-\(\hat{a}_{k}=\frac{a_{k}}{(\sum_{j}a_{j}^{2})^{1/2}}\)
+\(\hat{a}_{k}=\frac{a_{k}}{(\sum_{j}a_{j}^{2})^{1/2}}, \hat{b}\)
+\(f(x)\)
+
+\(g(x)\)
+
+\(\matchscr{A}\)
+
+\(\mathscr{A}\)
