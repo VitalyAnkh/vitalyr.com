@@ -1,0 +1,17 @@
+---
+title: "Test"
+date: 2021-03-30T11:22:22+08:00
+draft: true
+---
+#+title: Test
+
+This is for Hugo site test.
+
+#+begin_src rust
+fn main(){
+println!("Hello!");
+}
+#+end_src>
+
+Formula.
+\(f(x)\)
