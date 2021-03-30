@@ -9,9 +9,9 @@ This is for Hugo site test.
 
 #+begin_src rust
 fn main(){
-println!("Hello!");
+    println!("Hello!");
 }
 #+end_src>
 
 Formula.
-\(f(x)\)
+\(\hat{a}_{k}=\frac{a_{k}}{(\sum_{j}a_{j}^{2})^{1/2}}\)
