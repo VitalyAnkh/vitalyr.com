@@ -6,17 +6,32 @@ draft: false
 #+title: Test
 #+latex_header: \usepackage{mathrsfs}
 This is for Hugo site test.
-
+* Code
+** Rust code:
 #+begin_src rust
 fn main(){
     println!("Hello!");
 }
 #+end_src>
 
-Formula.
+** Python code:
+#+begin_src python
+print("Hello, vitalyr.com!")
+#+end_src
+
+* Formula
 \(\hat{a}_{k}=\frac{a_{k}}{(\sum_{j}a_{j}^{2})^{1/2}}, \hat{b}\)
-\(f(x)\)
 
-\(g(x)\)
+** Cauthy Integral Formula:
+\(f(a)=\frac{1}{2\pi i}\oint_{\gamma}\frac{f(z)}{z-a}dz\)
+** Special Characters:
+*** mathscr:
+\(\mathscr{A}\) \(\mathscr{R}\)
+*** mathbb:
+\(\mathbb{A}\) \(\mathbb{R}\)
+** Images: :ATTACH:
+:PROPERTIES:
+:ID:       c9aa5ae3-bddc-4447-bd25-0559f56cb644
+:END:
 
-\(\mathscr{A}\)
+[[attachment:_20210518_215055screenshot.png]]
