@@ -29,9 +29,5 @@ print("Hello, vitalyr.com!")
 \(\mathscr{A}\) \(\mathscr{R}\)
 *** mathbb:
 \(\mathbb{A}\) \(\mathbb{R}\)
-** Images: :ATTACH:
-:PROPERTIES:
-:ID:       c9aa5ae3-bddc-4447-bd25-0559f56cb644
-:END:
-
-[[attachment:_20210518_215055screenshot.png]]
+** Images
+[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/anime/2021-10-05-13-49-20-f700e4282a0ddd77860070369f7ffa71-photo_2020-08-07_01-08-36-04e0ec.jpg]]
