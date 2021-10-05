@@ -1,9 +1,9 @@
 ---
-title: "Test"
+title: "Testing Org Mode for Blog"
 date: 2021-03-30T11:22:22+08:00
 draft: false
 ---
-#+title: Test
+#+title: Testing Org Mode for Blog
 #+latex_header: \usepackage{mathrsfs}
 This is for Hugo site test.
 * Code
@@ -13,13 +13,23 @@ fn main(){
     println!("Hello!");
 }
 #+end_src>
+** Emacslisp Code:
+#+begin_src emacs-lisp
+(cdr '(fir oak maple))
+#+end_src
+
+#+RESULTS:
+| oak | maple |
 
 ** Python code:
 #+begin_src python
 print("Hello, vitalyr.com!")
 #+end_src
 
-* Formula
+#+RESULTS:
+: None
+
+* \(\LaTeX\) Formula
 \(\hat{a}_{k}=\frac{a_{k}}{(\sum_{j}a_{j}^{2})^{1/2}}, \hat{b}\)
 
 ** Cauthy Integral Formula:
@@ -30,4 +40,6 @@ print("Hello, vitalyr.com!")
 *** mathbb:
 \(\mathbb{A}\) \(\mathbb{R}\)
 ** Images
+#+attr_html: :width 50% :height 50%
+#+attr_org: :width 50% :height 50%
 [[https://gitee.com/Vitaly/img/raw/master/images/Pictures/anime/2021-10-05-13-49-20-f700e4282a0ddd77860070369f7ffa71-photo_2020-08-07_01-08-36-04e0ec.jpg]]
