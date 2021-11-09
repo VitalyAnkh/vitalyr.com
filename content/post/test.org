@@ -39,7 +39,12 @@ print("Hello, vitalyr.com!")
 \(\mathscr{A}\) \(\mathscr{R}\)
 *** mathbb:
 \(\mathbb{A}\) \(\mathbb{R}\)
+\(\mathbb{S}\)
 ** Images
 #+attr_html: :width 50% :height 50%
 #+attr_org: :width 50% :height 50%
 [[https://gitee.com/Vitaly/img/raw/master/images/Pictures/anime/2021-10-05-13-49-20-f700e4282a0ddd77860070369f7ffa71-photo_2020-08-07_01-08-36-04e0ec.jpg]]
+*** Resize Images:
+#+attr_html: :width 50% :height 50%
+#+attr_org: :width 50% :height 50%
+[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/anime/2021-10-05-15-05-31-20a0bded101e077be23a7ca35ed49b77-bf36.jpg]]
