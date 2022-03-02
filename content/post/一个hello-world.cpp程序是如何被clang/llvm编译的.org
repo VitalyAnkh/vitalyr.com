@@ -3,7 +3,7 @@ title: "一个hello-world.cpp程序是如何被clang/llvm编译的"
 date: 2022-03-02T17:23:07+08:00
 draft: false
 ---
-#+title: 一个hello-world.cpp程序是如何被clang/llvm编译的
+
 这篇文章是我学习clang/llvm的一个总结。
 * clang的架构
 编译原理课程上都会讲，一个编译器分为大致分为词法分析、语法分析、语义分析、中间代码生成、目标代码生成这些阶段，其中贯穿了错误处理和符号表处理。
@@ -53,7 +53,7 @@ Breakpoint 1: 2 locations.
 #+caption: CMake配置界面
 #+attr_latex: :width 0.50\linewidth
 #+attr_org: :width %50 :height %50
-[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/screenshots/2022-03-02-17-00-21-2022-03-02_16-54-d4c3.png][CMake配置界面]]
+[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/screenshots/2022-03-02-17-00-21-2022-03-02_16-54-d4c3.png]]
 在CMake Options那里填上编译llvm的选项，以及需要包含进来的项目，例如我填的是：
 #+begin_src bash
 -G "Ninja" -DLLVM_USE_LINKER=lld -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;cross-project-tests;lld;lldb;mlir;polly"
