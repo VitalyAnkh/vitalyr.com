@@ -203,7 +203,7 @@ Breakpoint 1: 2 locations.
 #+end_src
 然后给想要考察的函数里加一行：
 #+begin_src cpp
-llvm::errs()<<"my log"<<'\n';
+llvm::errs()<<"<the-function-name> log"<<'\n';
 #+end_src
 
 ** 让它崩溃
