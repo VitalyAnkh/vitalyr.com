@@ -35,7 +35,34 @@ int main(){
 
 =-lfmt= 是传递给 =clang= 的命令行参数。 =clang= 从命令行参数和预定义的平台相关选项生成编译配置。 =-lxxx= 表示要链接 =xxx=.
 
-抛开这个 =hello-world.cpp= 不谈，我们写一个让clang崩溃的函数，看看函数的调用栈：
+clang/llvm那么多组件让人毫无头绪，如何从中分析出 =clang= 编译一个程序时函数间的调用关系呢？
+
+抛开这个 =hello-world.cpp= 不谈，我们写一个让clang崩溃的cpp文件，看看函数的调用栈。
+这个cpp文件如下：
+#+begin_src cpp
+struct typeBase
+{
+  constexpr typeBase() : Lvalue() {}
+  int Lvalue;
+};
+
+struct type : private typeBase
+{
+  bool value;
+  type(bool v = 0) { value = v; }
+  consteval type(int i) { value = i; }
+  const bool operator*() const { return value; }
+};
+
+auto operator > (const type&a, const type&b) { return *a > *b; }
+
+int main() {
+  type T;
+  if (T > type(100)) { }
+}
+#+end_src
+我使用的llvm-project的commit hash是1f971e23f089c640d5a7df1e78572fe4d8bb1d0b，提交时间是2022年2月28日14:25。要想获得查看同样的调用栈，确保使用相同的commit.
+调用栈如下：
 #+begin_src cpp
 #64 0x0000557422bab7da _start (/opt/compiler-explorer/clang-trunk/bin/clang+++0x11ab7da)
 #63 0x00007fc70c4b30b3 __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b3)
@@ -103,30 +130,6 @@ int main(){
  #1 0x0000557424fb9150 llvm::sys::CleanupOnSignal(unsigned long) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x35b9150)
  #0 0x0000557424fbb27f PrintStackTraceSignalHandler(void*) Signals.cpp:0:0
 #+end_src
-这个cpp文件如下：
-#+begin_src cpp
-struct typeBase
-{
-  constexpr typeBase() : Lvalue() {}
-  int Lvalue;
-};
-
-struct type : private typeBase
-{
-  bool value;
-  type(bool v = 0) { value = v; }
-  consteval type(int i) { value = i; }
-  const bool operator*() const { return value; }
-};
-
-auto operator > (const type&a, const type&b) { return *a > *b; }
-
-int main() {
-  type T;
-  if (T > type(100)) { }
-}
-#+end_src
-
 ** 后端：中间代码优化器和llvm
 从源程序到llvm ir之后，llvm ir的生命历程已经有人写过了：https://eli.thegreenplace.net/2012/11/24/life-of-an-instruction-in-llvm
 珠玉在前，不写了。
