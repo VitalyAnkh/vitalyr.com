@@ -7,6 +7,7 @@ draft: false
 这篇文章是我学习clang/llvm的一个总结。
 * clang的架构
 编译原理课程上会讲，一个编译器大致分为分为词法分析、语法分析、语义分析、中间代码生成、目标代码生成这些阶段，其中贯穿了错误处理和符号表处理。
+
 clang/llvm在实现上是跟课本里讲的东西有区别的。例如，C/C++语言有预处理这一步，)例如 =#pragma= ，clang中把lexer集成到了preprocessor，词法分析时，preprocessor调用lex，普通的输入流由lexer处理，而lexer遇到宏展开(=#define xxx yyy=)，头文件解析(=#include<fmt/format.h>=)或者编译器原语(=#pragma=)时，lexer返回给preprocessor处理。
 
 #+attr_export: float-wrap
@@ -38,7 +39,7 @@ int main(){
 
 #+RESULTS:
 : Hello world!
-为了跟上时代的发展，我们来使用实现了 =C++ 20= 的 =std::foramt= 标准 的 =fmt= 库吧。所以为了正常运行，我们要喂给 =clang= 一个Flag: =-lfmt= ，让它可以链接到这个库。当然要想正常运行，你的系统上要先在正确的位置有这么一个库，Linux系统上就是在 =/usr/include/fmt= ）。
+来尝鲜一下实现了 =C++ 20= 的 =std::foramt= 标准 的 =fmt= 库。为了让clang找到并链接这个库，我们要喂给 =clang= 一个flag: =-lfmt= ，让它可以链接到这个库。当然要想正常运行，你的系统上要先在正确的位置有这么一个库，Linux系统上就是在 =/usr/include/fmt= ）。
 
 =-lfmt= 是传递给 =clang= 的命令行参数。 =clang= 从命令行参数和预定义的平台相关选项生成编译配置。 =-lxxx= 表示要链接 =xxx=.
 
