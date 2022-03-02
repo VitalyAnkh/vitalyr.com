@@ -1,5 +1,5 @@
 ---
-title: "一个hello-world.cpp程序是如何被clang/llvm编译的"
+title: "一个hello-world程序是如何被clang/llvm编译的"
 date: 2022-03-02T17:23:07+08:00
 draft: false
 ---
@@ -10,6 +10,126 @@ draft: false
 clang/llvm在实现上是跟课本里讲的东西有区别的。例如，C/C++语言有预处理这一步，预处理器会进行宏展开，解析编译器原语(directive)例如 =#pragma= ，clang中把
 * 编译器驱动器(driver): =clang= 和编译器前端
 首先要区分编译器驱动器和编译器前端库。前者负责生成编译任务的配置、调度编译任务、运行汇编器和链接器，也就是说，它驱动整个编译过程的进行。而后者是有具体功能（预处理、词法分析、语法分析、语义分析等）的库，也指那个可执行文件 =cc1= 。在这篇文章里，编译器前端库用clang指代，整个编译器工具链用clang/llvm指代，而这个驱动程序用小写的代码字体 =clang= 表示， =clang= 调用的具体执行任务的编译器用 =cc1= 表示。
+* 一个简单的 =hello-world.cpp= 程序是如何被clang/llvm编译的
+讨论的编译器版本和平台信息：
+#+begin_src bash
+$ clang --version
+clang version 13.0.1
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+#+end_src
+** 编译的前端 clang
+我们来用经典的 =hello-world.cpp= 来探究clang是如何把它编译成一个可执行文件的，具体到每个Clang中函数的调用。
+#+begin_src cpp :flags -lfmt
+#include <fmt/format.h>
+int main(){
+  fmt::print("Hello world!\n");
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Hello world!
+为了跟上时代的发展，我们来使用实现了 =C++ 20= 的 =std::foramt= 标准 的 =fmt= 库吧。所以为了正常运行，我们要喂给 =clang= 一个Flag: =-lfmt= ，让它可以链接到这个库。当然要想正常运行，你的系统上要先在正确的位置有这么一个库，Linux系统上就是在 =/usr/include/fmt= ）。
+
+=-lfmt= 是传递给 =clang= 的命令行参数。 =clang= 从命令行参数和预定义的平台相关选项生成编译配置。 =-lxxx= 表示要链接 =xxx=.
+
+抛开这个 =hello-world.cpp= 不谈，我们写一个让clang崩溃的函数，看看函数的调用栈：
+#+begin_src cpp
+#64 0x0000557422bab7da _start (/opt/compiler-explorer/clang-trunk/bin/clang+++0x11ab7da)
+#63 0x00007fc70c4b30b3 __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b3)
+#62 0x0000557422abb752 main (/opt/compiler-explorer/clang-trunk/bin/clang+++0x10bb752)
+#61 0x0000557425780405 clang::driver::Driver::ExecuteCompilation(clang::driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*> >&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3d80405)
+#60 0x0000557425777a3f clang::driver::Compilation::ExecuteJobs(clang::driver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*> >&) const (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3d77a3f)
+#59 0x0000557425776efa clang::driver::Compilation::ExecuteCommand(clang::driver::Command const&, clang::driver::Command const*&) const (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3d76efa)
+#58 0x00005574257a3ac8 clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, bool*) const (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3da3ac8)
+#57 0x0000557424ef34c3 llvm::CrashRecoveryContext::RunSafely(llvm::function_ref<void ()>) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x34f34c3)
+#56 0x00005574257a19f5 void llvm::function_ref<void ()>::callback_fn<clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, bool*) const::'lambda'()>(long) Job.cpp:0:0
+#55 0x0000557422babc5d ExecuteCC1Tool(llvm::SmallVectorImpl<char const*>&) driver.cpp:0:0
+#54 0x0000557422bafca4 cc1_main(llvm::ArrayRef<char const*>, char const*, void*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x11afca4)
+#53 0x0000557425a37013 clang::ExecuteCompilerInvocation(clang::CompilerInstance*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x4037013)
+#52 0x00005574259053e2 clang::CompilerInstance::ExecuteAction(clang::FrontendAction&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3f053e2)
+#51 0x000055742596ac41 clang::FrontendAction::Execute() (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3f6ac41)
+#50 0x0000557425f6e1f2 clang::CodeGenAction::ExecuteAction() (/opt/compiler-explorer/clang-trunk/bin/clang+++0x456e1f2)
+#49 0x0000557426de41cc clang::ParseAST(clang::Sema&, bool, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x53e41cc)
+#48 0x0000557425f64ef2 clang::BackendConsumer::HandleTopLevelDecl(clang::DeclGroupRef) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x4564ef2)
+#47 0x0000557425f70251 (anonymous namespace)::CodeGeneratorImpl::HandleTopLevelDecl(clang::DeclGroupRef) ModuleBuilder.cpp:0:0
+#46 0x000055742541cdb1 clang::CodeGen::CodeGenModule::EmitTopLevelDecl(clang::Decl*) (.part.5387) CodeGenModule.cpp:0:0
+#45 0x0000557425416a13 clang::CodeGen::CodeGenModule::EmitGlobal(clang::GlobalDecl) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a16a13)
+#44 0x00005574254162d5 clang::CodeGen::CodeGenModule::EmitGlobalDefinition(clang::GlobalDecl, llvm::GlobalValue*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a162d5)
+#43 0x0000557425419198 clang::CodeGen::CodeGenModule::EmitGlobalFunctionDefinition(clang::GlobalDecl, llvm::GlobalValue*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a19198)
+#42 0x00005574253d273a clang::CodeGen::CodeGenFunction::GenerateCode(clang::GlobalDecl, llvm::Function*, clang::CodeGen::CGFunctionInfo const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39d273a)
+#41 0x00005574253c8c43 clang::CodeGen::CodeGenFunction::EmitFunctionBody(clang::Stmt const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39c8c43)
+#40 0x000055742537852c clang::CodeGen::CodeGenFunction::EmitCompoundStmtWithoutScope(clang::CompoundStmt const&, bool, clang::CodeGen::AggValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x397852c)
+#39 0x0000557425372ad9 clang::CodeGen::CodeGenFunction::EmitStmt(clang::Stmt const*, llvm::ArrayRef<clang::Attr const*>) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3972ad9)
+#38 0x000055742537820e clang::CodeGen::CodeGenFunction::EmitIfStmt(clang::IfStmt const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x397820e)
+#37 0x0000557425372ad9 clang::CodeGen::CodeGenFunction::EmitStmt(clang::Stmt const*, llvm::ArrayRef<clang::Attr const*>) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3972ad9)
+#36 0x00005574253780d1 clang::CodeGen::CodeGenFunction::EmitIfStmt(clang::IfStmt const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39780d1)
+#35 0x00005574253c7fb8 clang::CodeGen::CodeGenFunction::EmitBranchOnBoolExpr(clang::Expr const*, llvm::BasicBlock*, llvm::BasicBlock*, unsigned long, clang::Stmt::Likelihood) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39c7fb8)
+#34 0x0000557425635315 clang::CodeGen::CodeGenFunction::EvaluateExprAsBool(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c35315)
+#33 0x000055742567c2a3 clang::CodeGen::CodeGenFunction::EmitScalarExpr(clang::Expr const*, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c7c2a3)
+#32 0x000055742567aa98 (anonymous namespace)::ScalarExprEmitter::Visit(clang::Expr*) CGExprScalar.cpp:0:0
+#31 0x0000557425679bdc (anonymous namespace)::ScalarExprEmitter::Visit(clang::Expr*) CGExprScalar.cpp:0:0
+#30 0x0000557425679bf3 (anonymous namespace)::ScalarExprEmitter::Visit(clang::Expr*) CGExprScalar.cpp:0:0
+#29 0x0000557425685250 (anonymous namespace)::ScalarExprEmitter::VisitCallExpr(clang::CallExpr const*) CGExprScalar.cpp:0:0
+#28 0x0000557425648ae8 clang::CodeGen::CodeGenFunction::EmitCallExpr(clang::CallExpr const*, clang::CodeGen::ReturnValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c48ae8)
+#27 0x000055742563ccf3 clang::CodeGen::CodeGenFunction::EmitCall(clang::QualType, clang::CodeGen::CGCallee const&, clang::CallExpr const*, clang::CodeGen::ReturnValueSlot, llvm::Value*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c3ccf3)
+#26 0x00005574255d92bf clang::CodeGen::CodeGenFunction::EmitCallArgs(clang::CodeGen::CallArgList&, clang::CodeGen::CodeGenFunction::PrototypeWrapper, llvm::iterator_range<clang::Stmt::CastIterator<clang::Expr, clang::Expr const* const, clang::Stmt const* const> >, clang::CodeGen::CodeGenFunction::AbstractCallee, unsigned int, clang::CodeGen::CodeGenFunction::EvaluationOrder) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd92bf)
+#25 0x00005574255d7c5b clang::CodeGen::CodeGenFunction::EmitCallArg(clang::CodeGen::CallArgList&, clang::Expr const*, clang::QualType) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd7c5b)
+#24 0x000055742562f8c9 clang::CodeGen::CodeGenFunction::EmitAnyExprToTemp(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c2f8c9)
+#23 0x000055742562f1fe clang::CodeGen::CodeGenFunction::EmitAnyExpr(clang::Expr const*, clang::CodeGen::AggValueSlot, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c2f1fe)
+#22 0x0000557425650bc1 clang::CodeGen::CodeGenFunction::EmitAggExpr(clang::Expr const*, clang::CodeGen::AggValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c50bc1)
+#21 0x000055742564dc3b clang::StmtVisitorBase<std::add_pointer, (anonymous namespace)::AggExprEmitter, void>::Visit(clang::Stmt*) CGExprAgg.cpp:0:0
+#20 0x000055742564d873 (anonymous namespace)::AggExprEmitter::VisitCallExpr(clang::CallExpr const*) CGExprAgg.cpp:0:0
+#19 0x000055742564d49b (anonymous namespace)::AggExprEmitter::withReturnValueSlot(clang::Expr const*, llvm::function_ref<clang::CodeGen::RValue (clang::CodeGen::ReturnValueSlot)>) CGExprAgg.cpp:0:0
+#18 0x0000557425649fcb clang::CodeGen::RValue llvm::function_ref<clang::CodeGen::RValue (clang::CodeGen::ReturnValueSlot)>::callback_fn<(anonymous namespace)::AggExprEmitter::VisitCallExpr(clang::CallExpr const*)::'lambda'(clang::CodeGen::ReturnValueSlot)>(long, clang::CodeGen::ReturnValueSlot) CGExprAgg.cpp:0:0
+#17 0x0000557425648ae8 clang::CodeGen::CodeGenFunction::EmitCallExpr(clang::CallExpr const*, clang::CodeGen::ReturnValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c48ae8)
+#16 0x000055742563ccf3 clang::CodeGen::CodeGenFunction::EmitCall(clang::QualType, clang::CodeGen::CGCallee const&, clang::CallExpr const*, clang::CodeGen::ReturnValueSlot, llvm::Value*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c3ccf3)
+#15 0x00005574255d92bf clang::CodeGen::CodeGenFunction::EmitCallArgs(clang::CodeGen::CallArgList&, clang::CodeGen::CodeGenFunction::PrototypeWrapper, llvm::iterator_range<clang::Stmt::CastIterator<clang::Expr, clang::Expr const* const, clang::Stmt const* const> >, clang::CodeGen::CodeGenFunction::AbstractCallee, unsigned int, clang::CodeGen::CodeGenFunction::EvaluationOrder) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd92bf)
+#14 0x00005574255d7b74 clang::CodeGen::CodeGenFunction::EmitCallArg(clang::CodeGen::CallArgList&, clang::Expr const*, clang::QualType) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd7b74)
+#13 0x000055742564731d clang::CodeGen::CodeGenFunction::EmitReferenceBindingToExpr(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c4731d)
+#12 0x000055742563ea5e clang::CodeGen::CodeGenFunction::EmitLValue(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c3ea5e)
+#11 0x00005574256476e6 clang::CodeGen::CodeGenFunction::EmitMaterializeTemporaryExpr(clang::MaterializeTemporaryExpr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c476e6)
+#10 0x0000557425643111 clang::CodeGen::CodeGenFunction::EmitAnyExprToMem(clang::Expr const*, clang::CodeGen::Address, clang::Qualifiers, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c43111)
+ #9 0x0000557425650bc1 clang::CodeGen::CodeGenFunction::EmitAggExpr(clang::Expr const*, clang::CodeGen::AggValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c50bc1)
+ #8 0x000055742564ed57 clang::StmtVisitorBase<std::add_pointer, (anonymous namespace)::AggExprEmitter, void>::Visit(clang::Stmt*) CGExprAgg.cpp:0:0
+ #7 0x00005574256509f1 (anonymous namespace)::AggExprEmitter::VisitConstantExpr(clang::ConstantExpr*) CGExprAgg.cpp:0:0
+ #6 0x00005574255caf8d clang::CodeGen::CodeGenFunction::EmitAggregateStore(llvm::Value*, clang::CodeGen::Address, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bcaf8d)
+ #5 0x000055742549b577 clang::CodeGen::CGBuilderTy::CreateStructGEP(clang::CodeGen::Address, unsigned int, llvm::Twine const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a9b577)
+ #4 0x000055742477ee02 llvm::PointerType::get(llvm::Type*, unsigned int) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x2d7ee02)
+ #3 0x00007fc70ca033c0 __restore_rt (/lib/x86_64-linux-gnu/libpthread.so.0+0x153c0)
+ #2 0x0000557424ef2ed8 CrashRecoverySignalHandler(int) CrashRecoveryContext.cpp:0:0
+ #1 0x0000557424fb9150 llvm::sys::CleanupOnSignal(unsigned long) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x35b9150)
+ #0 0x0000557424fbb27f PrintStackTraceSignalHandler(void*) Signals.cpp:0:0
+#+end_src
+这个cpp文件如下：
+#+begin_src cpp
+struct typeBase
+{
+  constexpr typeBase() : Lvalue() {}
+  int Lvalue;
+};
+
+struct type : private typeBase
+{
+  bool value;
+  type(bool v = 0) { value = v; }
+  consteval type(int i) { value = i; }
+  const bool operator*() const { return value; }
+};
+
+auto operator > (const type&a, const type&b) { return *a > *b; }
+
+int main() {
+  type T;
+  if (T > type(100)) { }
+}
+#+end_src
+
+** 后端：中间代码优化器和llvm
+从源程序到llvm ir之后，llvm ir的生命历程已经有人写过了：https://eli.thegreenplace.net/2012/11/24/life-of-an-instruction-in-llvm
+珠玉在前，不写了。
 * 如何梳理clang的编译流程
 clang的构建不用多说，要注意的是应该编译Debug版本的clang，因为我们要通过调试学习clang的内部架构. =cmake= 命令如下：
 #+begin_src cmake
@@ -19,9 +139,9 @@ cmake -G Ninja -DCMAKE_BUILE_TYPE=Debug -DLLVM_ENABLE_PROJECTS="clang;clang-tool
 ** 在命令行中用lldb或gdb调试clang
 编译好的 =clang= 也就是个普通可执行程序，用lldb/gdb上去调试就行。如前所述， =clang= 是一个编译器驱动器，它运行时会fork自己，fork出的子进程再编排编译任务，所以打的断点进不去。解决这个问题有两种方法：
 *** 不使用 =clang= ，在lldb里直接调试 =cc1=
-这么做需要我们告诉 =cc1= 该怎么编译，就是我们需要手动把 =clang= 喂给它的那些Option喂给它。难道要我们人脑写好它的Option吗？不用慌，我们可以问 =clang=:
+这么做需要我们告诉 =cc1= 该怎么编译，就是我们需要手动把 =clang= 喂给它的那些Option喂给它。难道要我们人脑梳理好它的Option吗？不用慌，我们可以问 =clang=:
 #+begin_src bash
-$ cmake-build-debug/bin/clang -### /home/vitalyr/projects/learn/C++/algorithms_vitalyr/play/test_clang.cpp
+cmake-build-debug/bin/clang -### /home/vitalyr/projects/learn/C++/algorithms_vitalyr/play/test_clang.cpp
 #+end_src
 输出为
 #+begin_src bash
@@ -44,7 +164,7 @@ Breakpoint 1: 2 locations.
 其中<Options>是前面 =clang= 要喂给 =cc1= 的那么长的选项，<file>是想要让 =clang= 编译的文件。
 *** 使用 =-fintegrated-cc1=
 更简单的方法是给 =clang= 加上 =-fintegrated-cc1= 这个选项
-** 使用Clion调试clang
+** 使用CLion调试clang/llvm
 我还没有达到熟悉lldb命令并在命令行里对clang/llvm这种项目里找文件找函数打断点调试无压力的程序，我在GUI里生产力会更高一些。对于clang/llvm这种大型monorepo项目，很多编辑器/IDE显得力不从心。得益于llvm项目良好的组织，配置Clion来开发调试clang/llvm也不难。
 
 首先用CLion打开 =llvm-project/llvm= 文件夹，CLion会自动读取这个文件夹下的 =CMakeLists.txt= ，然后询问你进行配置，也可以通过 =File | Settings | Build, Execution, Deploy | CMake= 找到这个界面：
@@ -73,29 +193,78 @@ Breakpoint 1: 2 locations.
 
 #+end_src
 
+#+begin_src bash
+PLEASE submit a bug report to https://gitcub.com/llvm/llvm-project/issues/ and include the crash backtrace, preprocessed source, and associated run script.
+Stack dump:
+0.	Program arguments: /opt/compiler-explorer/clang-trunk/bin/clang++ -g -o /app/output.s -mllvm --x86-asm-syntax=intel -S --gcc-toolchain=/opt/compiler-explorer/gcc-snapshot -fcolor-diagnostics -fno-crash-diagnostics -O2 --std=c++2a <source>
+1.	<source>:235:1: current parser token 'bool'
+2.	<source>:226:3 <Spelling=<source>:200:20>: LLVM IR generation of declaration 'main'
+3.	<source>:226:3 <Spelling=<source>:200:20>: Generating code for declaration 'main'
+ #0 0x0000557424fbb27f PrintStackTraceSignalHandler(void*) Signals.cpp:0:0
+ #1 0x0000557424fb9150 llvm::sys::CleanupOnSignal(unsigned long) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x35b9150)
+ #2 0x0000557424ef2ed8 CrashRecoverySignalHandler(int) CrashRecoveryContext.cpp:0:0
+ #3 0x00007fc70ca033c0 __restore_rt (/lib/x86_64-linux-gnu/libpthread.so.0+0x153c0)
+ #4 0x000055742477ee02 llvm::PointerType::get(llvm::Type*, unsigned int) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x2d7ee02)
+ #5 0x000055742549b577 clang::CodeGen::CGBuilderTy::CreateStructGEP(clang::CodeGen::Address, unsigned int, llvm::Twine const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a9b577)
+ #6 0x00005574255caf8d clang::CodeGen::CodeGenFunction::EmitAggregateStore(llvm::Value*, clang::CodeGen::Address, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bcaf8d)
+ #7 0x00005574256509f1 (anonymous namespace)::AggExprEmitter::VisitConstantExpr(clang::ConstantExpr*) CGExprAgg.cpp:0:0
+ #8 0x000055742564ed57 clang::StmtVisitorBase<std::add_pointer, (anonymous namespace)::AggExprEmitter, void>::Visit(clang::Stmt*) CGExprAgg.cpp:0:0
+ #9 0x0000557425650bc1 clang::CodeGen::CodeGenFunction::EmitAggExpr(clang::Expr const*, clang::CodeGen::AggValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c50bc1)
+#10 0x0000557425643111 clang::CodeGen::CodeGenFunction::EmitAnyExprToMem(clang::Expr const*, clang::CodeGen::Address, clang::Qualifiers, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c43111)
+#11 0x00005574256476e6 clang::CodeGen::CodeGenFunction::EmitMaterializeTemporaryExpr(clang::MaterializeTemporaryExpr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c476e6)
+#12 0x000055742563ea5e clang::CodeGen::CodeGenFunction::EmitLValue(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c3ea5e)
+#13 0x000055742564731d clang::CodeGen::CodeGenFunction::EmitReferenceBindingToExpr(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c4731d)
+#14 0x00005574255d7b74 clang::CodeGen::CodeGenFunction::EmitCallArg(clang::CodeGen::CallArgList&, clang::Expr const*, clang::QualType) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd7b74)
+#15 0x00005574255d92bf clang::CodeGen::CodeGenFunction::EmitCallArgs(clang::CodeGen::CallArgList&, clang::CodeGen::CodeGenFunction::PrototypeWrapper, llvm::iterator_range<clang::Stmt::CastIterator<clang::Expr, clang::Expr const* const, clang::Stmt const* const> >, clang::CodeGen::CodeGenFunction::AbstractCallee, unsigned int, clang::CodeGen::CodeGenFunction::EvaluationOrder) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd92bf)
+#16 0x000055742563ccf3 clang::CodeGen::CodeGenFunction::EmitCall(clang::QualType, clang::CodeGen::CGCallee const&, clang::CallExpr const*, clang::CodeGen::ReturnValueSlot, llvm::Value*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c3ccf3)
+#17 0x0000557425648ae8 clang::CodeGen::CodeGenFunction::EmitCallExpr(clang::CallExpr const*, clang::CodeGen::ReturnValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c48ae8)
+#18 0x0000557425649fcb clang::CodeGen::RValue llvm::function_ref<clang::CodeGen::RValue (clang::CodeGen::ReturnValueSlot)>::callback_fn<(anonymous namespace)::AggExprEmitter::VisitCallExpr(clang::CallExpr const*)::'lambda'(clang::CodeGen::ReturnValueSlot)>(long, clang::CodeGen::ReturnValueSlot) CGExprAgg.cpp:0:0
+#19 0x000055742564d49b (anonymous namespace)::AggExprEmitter::withReturnValueSlot(clang::Expr const*, llvm::function_ref<clang::CodeGen::RValue (clang::CodeGen::ReturnValueSlot)>) CGExprAgg.cpp:0:0
+#20 0x000055742564d873 (anonymous namespace)::AggExprEmitter::VisitCallExpr(clang::CallExpr const*) CGExprAgg.cpp:0:0
+#21 0x000055742564dc3b clang::StmtVisitorBase<std::add_pointer, (anonymous namespace)::AggExprEmitter, void>::Visit(clang::Stmt*) CGExprAgg.cpp:0:0
+#22 0x0000557425650bc1 clang::CodeGen::CodeGenFunction::EmitAggExpr(clang::Expr const*, clang::CodeGen::AggValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c50bc1)
+#23 0x000055742562f1fe clang::CodeGen::CodeGenFunction::EmitAnyExpr(clang::Expr const*, clang::CodeGen::AggValueSlot, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c2f1fe)
+#24 0x000055742562f8c9 clang::CodeGen::CodeGenFunction::EmitAnyExprToTemp(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c2f8c9)
+#25 0x00005574255d7c5b clang::CodeGen::CodeGenFunction::EmitCallArg(clang::CodeGen::CallArgList&, clang::Expr const*, clang::QualType) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd7c5b)
+#26 0x00005574255d92bf clang::CodeGen::CodeGenFunction::EmitCallArgs(clang::CodeGen::CallArgList&, clang::CodeGen::CodeGenFunction::PrototypeWrapper, llvm::iterator_range<clang::Stmt::CastIterator<clang::Expr, clang::Expr const* const, clang::Stmt const* const> >, clang::CodeGen::CodeGenFunction::AbstractCallee, unsigned int, clang::CodeGen::CodeGenFunction::EvaluationOrder) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3bd92bf)
+#27 0x000055742563ccf3 clang::CodeGen::CodeGenFunction::EmitCall(clang::QualType, clang::CodeGen::CGCallee const&, clang::CallExpr const*, clang::CodeGen::ReturnValueSlot, llvm::Value*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c3ccf3)
+#28 0x0000557425648ae8 clang::CodeGen::CodeGenFunction::EmitCallExpr(clang::CallExpr const*, clang::CodeGen::ReturnValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c48ae8)
+#29 0x0000557425685250 (anonymous namespace)::ScalarExprEmitter::VisitCallExpr(clang::CallExpr const*) CGExprScalar.cpp:0:0
+#30 0x0000557425679bf3 (anonymous namespace)::ScalarExprEmitter::Visit(clang::Expr*) CGExprScalar.cpp:0:0
+#31 0x0000557425679bdc (anonymous namespace)::ScalarExprEmitter::Visit(clang::Expr*) CGExprScalar.cpp:0:0
+#32 0x000055742567aa98 (anonymous namespace)::ScalarExprEmitter::Visit(clang::Expr*) CGExprScalar.cpp:0:0
+#33 0x000055742567c2a3 clang::CodeGen::CodeGenFunction::EmitScalarExpr(clang::Expr const*, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c7c2a3)
+#34 0x0000557425635315 clang::CodeGen::CodeGenFunction::EvaluateExprAsBool(clang::Expr const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3c35315)
+#35 0x00005574253c7fb8 clang::CodeGen::CodeGenFunction::EmitBranchOnBoolExpr(clang::Expr const*, llvm::BasicBlock*, llvm::BasicBlock*, unsigned long, clang::Stmt::Likelihood) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39c7fb8)
+#36 0x00005574253780d1 clang::CodeGen::CodeGenFunction::EmitIfStmt(clang::IfStmt const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39780d1)
+#37 0x0000557425372ad9 clang::CodeGen::CodeGenFunction::EmitStmt(clang::Stmt const*, llvm::ArrayRef<clang::Attr const*>) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3972ad9)
+#38 0x000055742537820e clang::CodeGen::CodeGenFunction::EmitIfStmt(clang::IfStmt const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x397820e)
+#39 0x0000557425372ad9 clang::CodeGen::CodeGenFunction::EmitStmt(clang::Stmt const*, llvm::ArrayRef<clang::Attr const*>) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3972ad9)
+#40 0x000055742537852c clang::CodeGen::CodeGenFunction::EmitCompoundStmtWithoutScope(clang::CompoundStmt const&, bool, clang::CodeGen::AggValueSlot) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x397852c)
+#41 0x00005574253c8c43 clang::CodeGen::CodeGenFunction::EmitFunctionBody(clang::Stmt const*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39c8c43)
+#42 0x00005574253d273a clang::CodeGen::CodeGenFunction::GenerateCode(clang::GlobalDecl, llvm::Function*, clang::CodeGen::CGFunctionInfo const&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x39d273a)
+#43 0x0000557425419198 clang::CodeGen::CodeGenModule::EmitGlobalFunctionDefinition(clang::GlobalDecl, llvm::GlobalValue*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a19198)
+#44 0x00005574254162d5 clang::CodeGen::CodeGenModule::EmitGlobalDefinition(clang::GlobalDecl, llvm::GlobalValue*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a162d5)
+#45 0x0000557425416a13 clang::CodeGen::CodeGenModule::EmitGlobal(clang::GlobalDecl) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3a16a13)
+#46 0x000055742541cdb1 clang::CodeGen::CodeGenModule::EmitTopLevelDecl(clang::Decl*) (.part.5387) CodeGenModule.cpp:0:0
+#47 0x0000557425f70251 (anonymous namespace)::CodeGeneratorImpl::HandleTopLevelDecl(clang::DeclGroupRef) ModuleBuilder.cpp:0:0
+#48 0x0000557425f64ef2 clang::BackendConsumer::HandleTopLevelDecl(clang::DeclGroupRef) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x4564ef2)
+#49 0x0000557426de41cc clang::ParseAST(clang::Sema&, bool, bool) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x53e41cc)
+#50 0x0000557425f6e1f2 clang::CodeGenAction::ExecuteAction() (/opt/compiler-explorer/clang-trunk/bin/clang+++0x456e1f2)
+#51 0x000055742596ac41 clang::FrontendAction::Execute() (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3f6ac41)
+#52 0x00005574259053e2 clang::CompilerInstance::ExecuteAction(clang::FrontendAction&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3f053e2)
+#53 0x0000557425a37013 clang::ExecuteCompilerInvocation(clang::CompilerInstance*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x4037013)
+#54 0x0000557422bafca4 cc1_main(llvm::ArrayRef<char const*>, char const*, void*) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x11afca4)
+#55 0x0000557422babc5d ExecuteCC1Tool(llvm::SmallVectorImpl<char const*>&) driver.cpp:0:0
+#56 0x00005574257a19f5 void llvm::function_ref<void ()>::callback_fn<clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, bool*) const::'lambda'()>(long) Job.cpp:0:0
+#57 0x0000557424ef34c3 llvm::CrashRecoveryContext::RunSafely(llvm::function_ref<void ()>) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x34f34c3)
+#58 0x00005574257a3ac8 clang::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, bool*) const (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3da3ac8)
+#59 0x0000557425776efa clang::driver::Compilation::ExecuteCommand(clang::driver::Command const&, clang::driver::Command const*&) const (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3d76efa)
+#60 0x0000557425777a3f clang::driver::Compilation::ExecuteJobs(clang::driver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*> >&) const (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3d77a3f)
+#61 0x0000557425780405 clang::driver::Driver::ExecuteCompilation(clang::driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::Command const*> >&) (/opt/compiler-explorer/clang-trunk/bin/clang+++0x3d80405)
+#62 0x0000557422abb752 main (/opt/compiler-explorer/clang-trunk/bin/clang+++0x10bb752)
+#63 0x00007fc70c4b30b3 __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b3)
+#64 0x0000557422bab7da _start (/opt/compiler-explorer/clang-trunk/bin/clang+++0x11ab7da)
+#+end_src
 ** 使用llvm的测试框架
 
-* 一个简单的 =hello-world.cpp= 程序是如何被clang/llvm编译的
-讨论的编译器版本和平台信息：
-#+begin_src bash
-$ clang --version
-clang version 13.0.1
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-#+end_src
-
-我们来用经典的 =hello-world.cpp= 来探究clang是如何把它编译成一个可执行文件的，具体到每个Clang中函数的调用。
-#+begin_src cpp :flags -lfmt
-#include <fmt/format.h>
-int main(){
-  fmt::print("Hello world!\n");
-  return 0;
-}
-#+end_src
-
-#+RESULTS:
-: Hello world!
-为了跟上时代的发展，我们来使用实现了 =C++ 20= 的 =std::foramt= 标准 的 =fmt= 库吧。所以为了正常运行，我们要喂给 =clang= 一个Flag: =-lfmt= ，让它可以链接到这个库。当然要想正常运行，你的系统上要先在正确的位置有这么一个库，Linux系统上就是在 =/usr/include/fmt= ）。
-
-上面这个 =-lfmt= 就是 =clang= 生成编译配置的来源之一，就是调用者在命令行喂给它的参数， =-lxxx= 表示要链接 =xxx= 这个库。
