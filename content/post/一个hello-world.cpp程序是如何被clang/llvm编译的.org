@@ -6,9 +6,16 @@ draft: false
 
 这篇文章是我学习clang/llvm的一个总结。
 * clang的架构
-编译原理课程上都会讲，一个编译器分为大致分为词法分析、语法分析、语义分析、中间代码生成、目标代码生成这些阶段，其中贯穿了错误处理和符号表处理。
-clang/llvm在实现上是跟课本里讲的东西有区别的。例如，C/C++语言有预处理这一步，预处理器会进行宏展开，解析编译器原语(directive)例如 =#pragma= ，clang中把
-* 编译器驱动器(driver): =clang= 和编译器前端
+编译原理课程上会讲，一个编译器大致分为分为词法分析、语法分析、语义分析、中间代码生成、目标代码生成这些阶段，其中贯穿了错误处理和符号表处理。
+clang/llvm在实现上是跟课本里讲的东西有区别的。例如，C/C++语言有预处理这一步，)例如 =#pragma= ，clang中把lexer集成到了preprocessor，词法分析时，preprocessor调用lex，普通的输入流由lexer处理，而lexer遇到宏展开(=#define xxx yyy=)，头文件解析(=#include<fmt/format.h>=)或者编译器原语(=#pragma=)时，lexer返回给preprocessor处理。
+
+#+attr_export: float-wrap
+#+caption: clang的词法分析
+#+attr_latex: :width 0.50\linewidth
+#+attr_org: :width %50 :height %50
+[[https://raw.githubusercontent.com/VitalyAnkh/img/main/images/Pictures/screenshots/2022-03-02-19-51-57-photo_2022-03-02_19-51-35-cd2e.jpg]]
+
+* 编译器驱动器(clang driver) =clang= 和编译器前端
 首先要区分编译器驱动器和编译器前端库。前者负责生成编译任务的配置、调度编译任务、运行汇编器和链接器，也就是说，它驱动整个编译过程的进行。而后者是有具体功能（预处理、词法分析、语法分析、语义分析等）的库，也指那个可执行文件 =cc1= 。在这篇文章里，编译器前端库用clang指代，整个编译器工具链用clang/llvm指代，而这个驱动程序用小写的代码字体 =clang= 表示， =clang= 调用的具体执行任务的编译器用 =cc1= 表示。
 * 一个简单的 =hello-world.cpp= 程序是如何被clang/llvm编译的
 讨论的编译器版本和平台信息：
