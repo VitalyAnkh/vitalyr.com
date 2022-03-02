@@ -1,0 +1,101 @@
+---
+title: "一个hello-world.cpp程序是如何被clang/llvm编译的"
+date: 2022-03-02T17:23:07+08:00
+draft: false
+---
+#+title: 一个hello-world.cpp程序是如何被clang/llvm编译的
+这篇文章是我学习clang/llvm的一个总结。
+* clang的架构
+编译原理课程上都会讲，一个编译器分为大致分为词法分析、语法分析、语义分析、中间代码生成、目标代码生成这些阶段，其中贯穿了错误处理和符号表处理。
+clang/llvm在实现上是跟课本里讲的东西有区别的。例如，C/C++语言有预处理这一步，预处理器会进行宏展开，解析编译器原语(directive)例如 =#pragma= ，clang中把
+* 编译器驱动器(driver): =clang= 和编译器前端
+首先要区分编译器驱动器和编译器前端库。前者负责生成编译任务的配置、调度编译任务、运行汇编器和链接器，也就是说，它驱动整个编译过程的进行。而后者是有具体功能（预处理、词法分析、语法分析、语义分析等）的库，也指那个可执行文件 =cc1= 。在这篇文章里，编译器前端库用clang指代，整个编译器工具链用clang/llvm指代，而这个驱动程序用小写的代码字体 =clang= 表示， =clang= 调用的具体执行任务的编译器用 =cc1= 表示。
+* 如何梳理clang的编译流程
+clang的构建不用多说，要注意的是应该编译Debug版本的clang，因为我们要通过调试学习clang的内部架构. =cmake= 命令如下：
+#+begin_src cmake
+cmake -G Ninja -DCMAKE_BUILE_TYPE=Debug -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra"
+#+end_src
+要想搞懂一个如clang/llvm这样大型项目，来先配置好工具吧。
+** 在命令行中用lldb或gdb调试clang
+编译好的 =clang= 也就是个普通可执行程序，用lldb/gdb上去调试就行。如前所述， =clang= 是一个编译器驱动器，它运行时会fork自己，fork出的子进程再编排编译任务，所以打的断点进不去。解决这个问题有两种方法：
+*** 不使用 =clang= ，在lldb里直接调试 =cc1=
+这么做需要我们告诉 =cc1= 该怎么编译，就是我们需要手动把 =clang= 喂给它的那些Option喂给它。难道要我们人脑写好它的Option吗？不用慌，我们可以问 =clang=:
+#+begin_src bash
+$ cmake-build-debug/bin/clang -### /home/vitalyr/projects/learn/C++/algorithms_vitalyr/play/test_clang.cpp
+#+end_src
+输出为
+#+begin_src bash
+clang version 15.0.0 (https://github.com/llvm/llvm-project.git 59d38f1b56d516f844733fe22294de7c78c8fbf6)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/vitalyr/projects/contribute/cpp/llvm-project/llvm/cmake-build-debug/bin
+ "/home/vitalyr/projects/contribute/cpp/llvm-project/llvm/cmake-build-debug/bin/clang-15" "-cc1" "-triple" "x86_64-unknown-linux-gnu" "-emit-obj" "-mrelax-all" "--mrelax-relocations" "-disable-free" "-clear-ast-before-backend" "-main-file-name" "test_clang.cpp" "-mrelocation-model" "static" "-mframe-pointer=all" "-fmath-errno" "-ffp-contract=on" "-fno-rounding-math" "-mconstructor-aliases" "-funwind-tables=2" "-target-cpu" "x86-64" "-tune-cpu" "generic" "-mllvm" "-treat-scalable-fixed-error-as-warning" "-debugger-tuning=gdb" "-fcoverage-compilation-dir=/home/vitalyr/projects/contribute/cpp/llvm-project/llvm" "-resource-dir" "/home/vitalyr/projects/contribute/cpp/llvm-project/llvm/cmake-build-debug/lib/clang/15.0.0" "-internal-isystem" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../include/c++/11.2.0" "-internal-isystem" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../include/c++/11.2.0/x86_64-pc-linux-gnu" "-internal-isystem" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../include/c++/11.2.0/backward" "-internal-isystem" "/home/vitalyr/projects/contribute/cpp/llvm-project/llvm/cmake-build-debug/lib/clang/15.0.0/include" "-internal-isystem" "/usr/local/include" "-internal-isystem" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../x86_64-pc-linux-gnu/include" "-internal-externc-isystem" "/include" "-internal-externc-isystem" "/usr/include" "-fdeprecated-macro" "-fdebug-compilation-dir=/home/vitalyr/projects/contribute/cpp/llvm-project/llvm" "-ferror-limit" "19" "-fgnuc-version=4.2.1" "-fcxx-exceptions" "-fexceptions" "-fcolor-diagnostics" "-faddrsig" "-D__GCC_HAVE_DWARF2_CFI_ASM=1" "-o" "/tmp/test_clang-78d0b0.o" "-x" "c++" "/home/vitalyr/projects/learn/C++/algorithms_vitalyr/play/test_clang.cpp"
+ "/usr/bin/ld" "--eh-frame-hdr" "-m" "elf_x86_64" "-dynamic-linker" "/lib64/ld-linux-x86-64.so.2" "-o" "a.out" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../lib64/crt1.o" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../lib64/crti.o" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/crtbegin.o" "-L/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0" "-L/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../lib64" "-L/lib/../lib64" "-L/usr/lib/../lib64" "-L/home/vitalyr/projects/contribute/cpp/llvm-project/llvm/cmake-build-debug/bin/../lib" "-L/lib" "-L/usr/lib" "/tmp/test_clang-78d0b0.o" "-lgcc" "--as-needed" "-lgcc_s" "--no-as-needed" "-lc" "-lgcc" "--as-needed" "-lgcc_s" "--no-as-needed" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/crtend.o" "/usr/lib64/gcc/x86_64-pc-linux-gnu/11.2.0/../../../../lib64/crtn.o"
+#+end_src
+可以看到 =clang= 给我们生成了非常多的编译选项。然后，如此运行 ==lldb=:
+#+begin_src bash
+lldb -- cmake-build-debug/bin/clang
+(lldb) target create "cmake-build-debug/bin/clang"
+Current executable set to '/home/vitalyr/projects/contribute/cpp/llvm-project/llvm/cmake-build-debug/bin/clang' (x86_64).
+(lldb) b CXXNameMangler::mangle
+Breakpoint 1: 2 locations.
+(lldb) r -cc1 <Options> <file>
+#+end_src
+其中<Options>是前面 =clang= 要喂给 =cc1= 的那么长的选项，<file>是想要让 =clang= 编译的文件。
+*** 使用 =-fintegrated-cc1=
+更简单的方法是给 =clang= 加上 =-fintegrated-cc1= 这个选项
+** 使用Clion调试clang
+我还没有达到熟悉lldb命令并在命令行里对clang/llvm这种项目里找文件找函数打断点调试无压力的程序，我在GUI里生产力会更高一些。对于clang/llvm这种大型monorepo项目，很多编辑器/IDE显得力不从心。得益于llvm项目良好的组织，配置Clion来开发调试clang/llvm也不难。
+
+首先用CLion打开 =llvm-project/llvm= 文件夹，CLion会自动读取这个文件夹下的 =CMakeLists.txt= ，然后询问你进行配置，也可以通过 =File | Settings | Build, Execution, Deploy | CMake= 找到这个界面：
+
+#+attr_export: float-wrap
+#+caption: CMake配置界面
+#+attr_latex: :width 0.50\linewidth
+#+attr_org: :width %50 :height %50
+[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/screenshots/2022-03-02-17-00-21-2022-03-02_16-54-d4c3.png][CMake配置界面]]
+在CMake Options那里填上编译llvm的选项，以及需要包含进来的项目，例如我填的是：
+#+begin_src bash
+-G "Ninja" -DLLVM_USE_LINKER=lld -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;compiler-rt;cross-project-tests;lld;lldb;mlir;polly"
+#+end_src
+这里使用llvm自己的 =lld= 链接器，开启了clang, clang-tools-extra等项目。
+然后就可以像一个普通的C++项目调试了。注意clang driver的主函数在 =clang/tools/driver/driver.cpp= ，可以先在这里面打几个断点观察程序运行，然后进一步在它调用的你感兴趣的函数里打断点。
+#+attr_export: float-wrap
+#+caption: 使用CLion调试clang
+#+attr_latex: :width 0.50\linewidth
+#+attr_org: :width %50 :height %50
+[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/screenshots/2022-03-02-17-20-15-2022-03-02_17-20-d8c6.png][使用CLion调试clang]]
+** 使用 =llvm::error()= 给clang打log
+修改clang的源代码，在感兴趣的函数里打log。例如，要考察
+** 让它崩溃
+没有什么比一个崩溃的函数调用栈更让人兴奋的了。只不过要找到可以让它崩溃的程序。那就来找一些可以让clang崩溃的有趣程序吧。
+#+begin_src cpp
+
+#+end_src
+
+** 使用llvm的测试框架
+
+* 一个简单的 =hello-world.cpp= 程序是如何被clang/llvm编译的
+讨论的编译器版本和平台信息：
+#+begin_src bash
+$ clang --version
+clang version 13.0.1
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+#+end_src
+
+我们来用经典的 =hello-world.cpp= 来探究clang是如何把它编译成一个可执行文件的，具体到每个Clang中函数的调用。
+#+begin_src cpp :flags -lfmt
+#include <fmt/format.h>
+int main(){
+  fmt::print("Hello world!\n");
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+: Hello world!
+为了跟上时代的发展，我们来使用实现了 =C++ 20= 的 =std::foramt= 标准 的 =fmt= 库吧。所以为了正常运行，我们要喂给 =clang= 一个Flag: =-lfmt= ，让它可以链接到这个库。当然要想正常运行，你的系统上要先在正确的位置有这么一个库，Linux系统上就是在 =/usr/include/fmt= ）。
+
+上面这个 =-lfmt= 就是 =clang= 生成编译配置的来源之一，就是调用者在命令行喂给它的参数， =-lxxx= 表示要链接 =xxx= 这个库。
