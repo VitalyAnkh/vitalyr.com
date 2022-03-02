@@ -64,7 +64,7 @@ Breakpoint 1: 2 locations.
 #+caption: 使用CLion调试clang
 #+attr_latex: :width 0.50\linewidth
 #+attr_org: :width %50 :height %50
-[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/screenshots/2022-03-02-17-20-15-2022-03-02_17-20-d8c6.png][使用CLion调试clang]]
+[[https://gitee.com/Vitaly/img/raw/master/images/Pictures/screenshots/2022-03-02-17-20-15-2022-03-02_17-20-d8c6.png]]
 ** 使用 =llvm::error()= 给clang打log
 修改clang的源代码，在感兴趣的函数里打log。例如，要考察
 ** 让它崩溃
