@@ -3,77 +3,281 @@ title: "给未来几何和拓扑学家的阅读建议"
 date: 2021-11-10T04:27:56+08:00
 draft: false
 ---
-#+title: Further Reading
 #+begin_quote
 “你们的事业的成长，应该像一棵树的成长一样，应该是顺其自然、无间断和全面的。我希望你们的根能够在这个学院的肥沃土地下面尽量深入，以使你们的树干长得既粗且壮。这样，将来无论树叶多么茂盛丰满，也永不会有水分供应不暇的毛病。在上空将不时会有狂风大雨，也会有行雷闪电。所以切勿长得太快太高[fn:1]。”
 #+end_quote
 
-下面，我仅仅列出标题和作者；全部细节可以在文献目录里找到[fn:2]。某些作品被列进来仅仅因为他们与主题高度相关，而我相信他们值得引起你的注意（即使他们并不是我的菜）。然而大多数作品被列进来是因为我认为他们如珍宝一般，而我向你强烈推荐它们。许多其他极好的书躺在我的书架上，我也经常寻求他们的建议，然而他们并没有被包括进来，仅仅因为我努力把这个（已经很长的）书单削减到可管理的长度----我向这些伟大作品的作者感到道歉。最后，我也对我还没有发现的伟大作品的作者先说一句抱歉！
-* 整体推荐
-首先，让我用我认为非常有价值的六部作品来做铺垫，每部作品的内容都是 涵盖了本书的多个章节。
-** The Road to Reality, by Roger Penrose （罗杰。彭罗斯）.
-  一部几乎涵盖所有物理学和大部分数学的非凡全景图，由这两个领域的大师撰写。许多见解只有在这里才能找到，而且这些见解被彭罗斯出色的（和美丽的！）手绘赋予了生命。
-** Gravitation, by Misner, Thorne, and Wheeler.
-  在1973年首次出版后的近50年里，这部经典之作仍然是对爱因斯坦的几何引力理论（广义相对论）和它所依据的微分几何的最好介绍之一。它也包含了对微分形式的最好的、最具几何性的介绍之一，包括允许人们有效计算黎曼张量的曲率2-forms。普林斯顿大学出版社的新版（2017年）做得很好，并包含了Charles Misner和Kip Thorne的新介绍，讨论了自该书出版以来该领域令人兴奋的发展。
-** Differential Geometry in the Large, by Heinz Hopf.
-  Hopf不仅是二十世纪数学界的杰出人物之一，也是一位论述的大师。在这里，微分几何学和拓扑学的思想（其中许多是由Hopf本人提出的）以一种美丽的方式汇集在一起，以非凡的清晰度和简单性进行解释。每当我再次阅读这本《大师作品》，我就觉得有位仁慈的魔术师在书中插入了更多美妙的想法，因为我发誓，在我上次看的时候，这个美丽的想法还没有出现在书页上！"。
-** Elementary Differential Geometry (revised 2nd edition), by Barrett O’Neill.
-  这本开拓性的书于1966年首次出版，开创了在本科阶段使用微分形式的先河。半个多世纪后的今天，在我看来，O'Neill的作品仍然是本科阶段对这一主题唯一最清晰、最优雅、最现代（讽刺吧？）的处理方式（除了当代的同类书籍！）。
-** Geometrical Methods of Mathematical Physics, by Bernard Schutz.
-  这部作品（现在已经有40年的历史了！）是一个永恒的宝库，涵盖了流形、张量、李导数和李群、形式、黎曼几何、规整理论以及其他大量的物理学应用。为了实现这一目标，Schutz教授成为了《星际迷航》中的斯波克先生。他的另一半瓦肯人格使他能够建立一个完美的晶体逻辑结构，其中每一件事都被简明而严格地证明，而且--与我在本书中的（我希望是美味的）芝士汉堡方法不同--犹太教规被严格遵守：依赖于公制存在的概念被严格而明确地与那些不依赖于公制的概念分开。但是，与此同步，Schutz能够利用他的另一半人格来提供丰富的直觉，揭示出潜在的几何现实。
-** Mathematics and Its History (3rd edition), by John Stillwell.
-  通过历史的视角，对所有的数学进行了一次出色的全景展示。但不要误解，这主要不是一本关于历史的书，相反，它从根本上是一本关于数学本身的相互联系和意义的作品，所有这些都以一种相当简洁的风格（相对于我来说！）来解释，具有深刻的洞察力和清晰的思路。
+** 翻译说明
++ 这是对Needham新书Visual Differential Geometry and Forms的附录的翻译，我将其视为给未来几何和拓扑学家绝佳的阅读建议。
++ 作者将自己的这本书简称为VDGF。作者把VDGF写成了一出戏剧，分为五幕，依次是：空间的本质，度量，曲率，平行移动，微分形式。
++ 也许翻译这本书并没有什么意义，因为列出的几乎所有参考书都没有中文翻译，这就要求读者看完这个中文书目介绍后继续读英文书。那就权当我自己的阅读记录了。有中文翻译的书我都用括号列出了中文书名。
++ Tristan Needham写作Visual Differential Geometry and Forms用了十年时间（2011年到2021年），如果你对现代几何学感兴趣的话，去读它吧，它不会让你失望的，即使你已经从别的书学到了相关知识，因为Needham用了很多新奇（甚至是原创，当然不是民科，他是正经的学者）的途径描述几何的理论。
++ Needham的另一本书Visual Complex Analysis也非常值得一读。
++ 较著名的人物使用中文译名，不太知名的名字未翻译。当然这也看我自己喜好。
 
-* 一般几何学推荐
+下面，我仅仅列出标题和作者；全部细节可以在文献目录里找到[fn:2]。某些作品被列进来仅仅因为他们与主题高度相关，而我相信他们值得引起你的注意（即使他们并不是我的菜）。然而大多数作品被列进来是因为我认为他们如珍宝一般，而我向你强烈推荐它们。许多其他极好的书躺在我的书架上，我也经常寻求他们的建议，然而他们并没有被包括进来，仅仅因为我努力把这个（已经很长的）书单削减到可管理的长度----我向这些伟大作品的作者致歉。最后，我也对我还没有发现的伟大作品的作者先说一句抱歉！
+** 整体推荐
+首先，让我用我认为非常有价值的六部作品来做铺垫，每部作品的内容都涵盖了本书（指Visual Differential Geometry and Forms）的多个章节。
++ The Road to Reality, by Roger Penrose （罗杰 彭罗斯）.
+
+  一部几乎涵盖所有物理学和大部分数学的非凡全景图，由这两个领域的大师撰写。许多见解只有在这里才能找到，而且这些见解被彭罗斯出色的（和美丽的！）手绘赋予了生命。
++ Gravitation, by Misner, Thorne, and Wheeler.
+
+  在1973年首次出版后的近50年里，这部经典之作仍然是对爱因斯坦的几何引力理论（广义相对论）和它所依据的微分几何的最好介绍之一。它也包含了对微分形式的最好的、最具几何性的介绍之一，包括允许人们有效计算黎曼张量的曲率2-forms。普林斯顿大学出版社的新版（2017年）做得很好，并包含了Charles Misner和Kip Thorne的新介绍，讨论了自该书出版以来该领域令人兴奋的发展。
++ Differential Geometry in the Large, by Heinz Hopf.
+
+  Hopf不仅是二十世纪数学界的杰出人物之一，也是一位论述的大师。在这里，微分几何学和拓扑学的思想（其中许多是由Hopf本人提出的）以一种美丽的方式汇集在一起，以非凡的清晰度和简单性进行解释。每当我再次阅读这本《大师作品》，我就觉得有位仁慈的魔术师在书中插入了更多美妙的想法，因为我发誓，在我上次看的时候，这个美丽的想法还没有出现在书页上！。
++ Elementary Differential Geometry (revised 2nd edition), by Barrett O’Neill.
+
+  这本开拓性的书于1966年首次出版，开创了在本科阶段使用微分形式的先河。半个多世纪后的今天，在我看来，O'Neill的作品仍然是本科阶段对这一主题唯一最清晰、最优雅、最现代（讽刺吧？）的处理方式（除了当代的同类书籍！）。
++ Geometrical Methods of Mathematical Physics, by Bernard Schutz.
+
+  这部作品（现在已经有40年的历史了！）是一个永恒的宝库，涵盖了流形、张量、李导数和李群、形式、黎曼几何、gauge理论以及其他大量的物理学应用。为了实现这一目标，Schutz教授化身为《星际迷航》中的斯波克先生。他的另一半瓦肯人格使他能够建立一个完美的晶体逻辑结构，其中每一件事都被简明而严格地证明，而且----与我在本书中的（我希望是美味的）芝士汉堡方法不同----犹太教规被严格遵守：依赖于公制存在的概念被严格而明确地与那些不依赖于公制的概念分开。但是，与此同步，Schutz能够利用他的另一半人格来提供丰富的直觉，揭示出潜在的几何现实。
++ Mathematics and Its History (3rd edition), by John Stillwell.
+
+  从历史的视角对所有的数学进行了一次出色的全景展示。但不要误解，这主要不是一本关于历史的书，相反，它从根本上是一本关于数学本身的相互联系和意义的作品，所有这些都以一种相当简洁的风格（相对于我来说！）来解释，具有深刻的洞察力和清晰的思路。
+
+** 一般几何学推荐
 以下作品涉及一般的几何学，尤其是双曲几何学。(微分几何学有它自己的类别）。
-** Geometry and the Imagination, by David Hilbert and S. Cohn-Vossen.
++ Geometry and the Imagination, by David Hilbert and S. Cohn-Vossen.
+
   这是20世纪最伟大的数学家之一对几何学进行的一次宏伟而深刻的调查，重点在于直观的理解。这些图表（由K.H.Naumann和H.Bödeker绘制）具有令人惊叹的美，令我羡慕不已。
-** Experiencing Geometry, by David W. Henderson and Daina Taimina.
++ Experiencing Geometry, by David W. Henderson and Daina Taimina.
   一个非常不寻常的方法，在哲学上类似于我的方法（但使用Moore方法），专注于几何学的直观、实验性调查。它包含对平行移动和整体性的重要讨论。他们的方法与我的方法的重叠在序言中的这段引文中得到了明确。"本书是基于这样一种观点：证明是一种令人信服的交流，它回答了为什么？（重点在斜体字）。（原文引号中为“This book is based on a view of proof as a convincing communication that answers—Why?”，其中a convincing communication that answers--Why? 为斜体。）
-** Introduction to Geometry (2nd edition), by H.S.M. Coxeter.
++ Introduction to Geometry (2nd edition), by H.S.M. Coxeter.
+
   精彩清晰的评述，出自一位当代大师之手。
-** Geometry, by Brannan, Esplen, and Gray.
++ Geometry, by Brannan, Esplen, and Gray.
+
   一本优秀的现代几何学概览，基于克莱因对变换群的看法。
-** Euclidean and Non-Euclidean Geometries: Development and History, by Marvin J. Greenberg.
++ Euclidean and Non-Euclidean Geometries: Development and History, by Marvin J. Greenberg.
+
   这是一部有价值的、详细的双曲几何学发展史，包括对Gauss、Bolyai和其他许多人的关键性私人信件的长篇引用。
-** The Poincaré Half-Plane, by Saul Stahl.
++ The Poincaré Half-Plane, by Saul Stahl.
+
   标题说明了一切。
-** Geometry Revealed, by Marcel Berger.
++ Geometry Revealed, by Marcel Berger.
+
   高级得多的几何学评述，出自20世纪最伟大的几何学家之一，重点是概念性的证明和未解决的问题。
 
-* 拓扑学
-** Intuitive Topology, by V. V. Prasolov.
+** 拓扑学
++ Intuitive Topology, by V. V. Prasolov.
+
   不到100页的篇幅，而且充满了图表，这本超级友好的入门书不愧于它的标题!
-** Euler’s Gem, by David S. Richeson.
++ Euler’s Gem, by David S. Richeson.
+
   对欧拉的多面体公式的历史和相关的数学思想进行了精湛的、数学上准确而又引人入胜的描述。
-** Surface Topology, by P. A. Firby and C. F. Gardiner.
++ Surface Topology, by P. A. Firby and C. F. Gardiner.
+
 一本非常友好、图文并茂的介绍拓扑学的基本 *几何* 思想的书。
-** First Concepts of Topology, by W. G. Chinn and N. E. Steenrod.
++ First Concepts of Topology, by W. G. Chinn and N. E. Steenrod.
+
 另一本非常友好、图文并茂的介绍拓扑学的基本 *几何* 思想的书。
-** Topology: A Very Short Introduction, by Richard Earl
++ Topology: A Very Short Introduction, by Richard Earl
+
 这本了不起的小书没有辜负它的标题，在短短140页中涵盖了大量的基础观点，而且它以非常清晰、初等、非正式的风格做到了这一点。这是我对这一主题新的最喜欢的介绍。
-** The Shape of Space (3rd edition), by Jeffrey R. Weeks.
++ The Shape of Space (3rd edition), by Jeffrey R. Weeks.
+
 本书是对二维和三维空间的拓扑学进行的一次奇妙的清晰的、令人着迷的、初等的处理。本书四部分中的最后一部分是关于检测宇宙的拓扑的可能性! 附录中包含了John Horton Conway著名的表面分类定理的ZIP证明，由乔治-K-弗朗西斯提供精美的插图。
-** Three-Dimensional Geometry and Topology, by William P. Thurston.
++ Three-Dimensional Geometry and Topology, by William P. Thurston.
+
 瑟斯顿因发现3流形从根本上是由双曲几何建立起来的而获得菲尔兹奖。在这本书中，你将看到瑟斯顿独特的论述，尽管拓扑学的难度迅速增加，但前100页提供了一个相对初级的、高度原创的双曲几何介绍，不容错过。
 
-* Hopf 的场线（Line Field）和物理学中的Poincaré–Hopf定理
-在本书中，我力图引起人们对线场和Hopf的美丽结果的注意，即Poincaré–Hopf定理也适用于它们，（（19.9），第213页）。这些观点几乎已经从现代数学教科书中消失了，我强烈认为现在已经到了复兴的时候。尽管如此，物理学家们从未忽视过这些思想的价值，他们用精彩的新发现维持着这些思想。
+** Hopf的线场（Line Field）和物理学中的Poincaré–Hopf定理
 
-在这里，我不得不列出研究论文而不是说明性的教科书。我所知道的唯一阐述性的数学处理方法是霍普夫（1956）本人的讲座（见前文），以及他的学生斯托克（1969）的书。尽管对光学的最新贡献明确地引用了霍普夫的工作--甚至把分数指数称为 "霍普夫指数"--这些想法是由J.F.Nye和后来的迈克尔-贝里爵士提出的，他们似乎都不知道霍普夫（1956）。(注意：在阅读这些论文时，重要的是要理解数学家称之为整体性的东西，物理学家有时称之为非整体性的东西！)
+在本书中，我力图引起人们对线场和Hopf的美丽结果的注意，即Poincaré–Hopf定理也适用于它们，（（19.9），第213页）。这些观点几乎已经从现代数学教科书中消失了，我强烈认为现在已经到了复兴的时候。尽管如此，物理学家们从未忽视过这些思想的价值，他们用精彩的新发现保持着这些思想。
 
-- The Topology of Ridge Systems, by Roger Penrose.
-  
-  一个完全初级的介绍（对非数学家而言），以指纹和掌纹为例，介绍了这一思想圈，因为这些确实是线状领域！"。
+在这里，我不得不列出研究论文而不是说明性的教科书。我所知道的唯一阐述性的数学处理方法是Hopf（1956）本人的讲座（见前文），以及他的学生Stoker（1969）的书。尽管对光学的最新贡献明确地引用了Hopf的工作--甚至把分数指数称为 "Hopf指数"--这些想法是由J.F.Nye和后来的Michael Berry爵士提出的，然而他们似乎都不知道Hopf（1956）。(注意：在阅读这些论文时，重要的是要理解数学家称之为完整的东西(Holonomy)，物理学家有时称之为非完整的东西(anholonomy)！)
 
-* 翻译说明
-- 这是对Needham新书Visual Differential Geometry and Forms的附录的翻译，我将其视为给未来几何和拓扑学家绝佳的阅读建议。
-- 书名和作者名未译出，方便查找。
-- 文中的“形式”原文为Forms，应该理解为微分形式。
-- 较著名的人物使用中文译名，不太知名的名字未翻译。当然这也看我自己喜好。
++ The Topology of Ridge Systems, by Roger Penrose.
 
+  一个完全初级的介绍（对非数学家而言），以指纹和掌纹为例，介绍了这一思想，因为这些确实是线场（line field)！"。
+
++ The Fingerprint of the Weyl Tensor, Spinors and Space-Time, Vol. 2, pp. 229–233, by Roger Penrose.
+
+  Penrose对Weyl曲率张量的“指纹”描述揭示了具有奇异点的线场拥有分数指数。
+
++ I. Liquid Crystals. On the Theory of Liquid Crystals, by F. C. Frank.
+
+  物理学中最早出现的线场之一。请注意，在这里它们被称为线状场(nematic field)，其奇异点被称为拓扑缺陷。
+
++ The Poincaré–Hopf Theorem for Line Fields Revisited, by Diarmuid Crowley and Mark Grant.
+
+  对该定理的历史和应用进行了很好的回顾；它还包括一个所有维度的一般证明。
+
++ Generic Singularities of Line Fields on 2D Manifolds, by Ugo Boscain, Ludovic Sacchelliy, and Mario Sigalotti.
+
+  对自然界中出现的许多线场及其数学分类进行了很好的回顾，与脐点(umbilic point)有关。
+
++ Natural Focusing and Fine Structure of Light: Caustics and Wave Dislocations, by J. F. Nye
+
+  Nye率先将线场（偏振场）引入光学领域：一般的奇点是二维的圆偏振点或三维的线。我们还分析了另外两种奇点：强度奇点（caustics）和相位奇点（vortices），这些奇点是由Nye和迈克尔-贝里爵士(Sir Michael Berry)开创的。
+
++ The Quantum Phase, Five Years After, by M. V. Berry, in Shapere and Wilczek (1989).
+
+  量子相的发现者本人的评论，明确地将这一发现与微分几何联系起来，讨论了围绕脐点的曲率线，并提出了一个关键的看法：围绕这样一个点的循环会导致±π的旋转，对应于±1/2的指数，如[19.14 a & A]中所示。关于这一现象的可爱说明，见希尔伯特，1952年（Hilbert, D. 1952. Geometry and the Imagination. New York: Chelsea，第189页）。
+
++ Geometry of Phase and Polarization Singularities, Illustrated by Edge Diffraction and the Tides, by M. V. Berry.
+
+  边缘衍射和潮汐也会产生具有分数指数的奇异点。
+
++ Index Formulae for Singular Lines of Polarization, by M. V. Berry.
+
+  获得了空间中单色光场的偏振为纯圆形（C）或纯线性（L）的线的指数公式。指数（C线为±1/2，L线为±1）涉及电场或磁场及其在线上的导数。
+
++ Polarization Singularities in the Clear Sky, by M. V. Berry, M. R. Dennis, and R. L. Lee.
+
+  关于日光中偏振方向模式的说明。奇异点（两个在太阳附近，两个在反太阳附近）是天空中偏振线场模式的指数为+1/2和偏振强度为零的点。
+
++ A Half-Century of Physical Asymptotics and Other Diversions: Selected Works by Michael Berry, by M. V. Berry
+
+  迈克尔-贝里爵士(Sir Michael Berry)对光学的开创性贡献，重点是揭示日常生活和前沿基础光子研究中各种光学奇异现象无处不在的表现。
+
++ Singularities and Poincaré Indices of Electromagnetic Multipoles, by Weijin Chen, Yuntian Chen, and Wei Liu.
+
+  作者绘制了不同阶数的多极辐射的所有奇点，确定了它们的指数，并明确表明整个动量球上的指数之和总是2，与Poincaré-Hopf定理一致。
+
++ Global Mie Scattering: Polarization Morphologies and the Underlying Topological Invariant, by Weijin Chen, Qingdong Yang, Yuntian Chen, and Wei Liu.
+
+  用庞加莱-霍普夫定理（带分数指数）表明如果你将任何形式的相干偏振光照在任何粒子或粒子簇上，一定有一个方向的散射是零或圆偏振。
+
++ Line Singularities and Hopf Indices of Electromagnetic Multipoles, by Weijin Chen, Yuntian Chen, and Wei Liu
+
+  本文研究了半整数霍普夫指数、电磁多极和布洛赫模式(Bloch mode)之间的联系。
+** 微分几何
++ Differential Geometry: A Geometric Introduction, by David W. Henderson.
+
+  在我将列出的所有微分几何书籍中，这本书在精神上与我的工作最接近，这就是我将其放在第一位的原因。我是在写《可视化微分几何和微分形式》的后期才发现这本书的，并立即确信亨德森教授是一个同类人，一个数学上的兄弟。关于我试图与他取得联系的悲惨故事，见第252页的脚注。[fn:3]
+
++ 150 Years After Gauss’ “Disquisitiones generales circa superﬁcies curvas,” by Peter Dombrowski.
+
+  这本独具价值和极富洞察力的作品利用高斯给朋友的信、私人笔记本和未发表的手稿追溯了高斯在微分几何学方面的发现的演变，其在革命性的《曲面的一般研究》中达到高潮，向世界宣布了Theorema Egregium（高斯绝妙定理）。作为额外的奖励，Dom-browski以拉丁文原版附上了高斯1827年的杰作全文，在相对的几页上有英文翻译。
+
++ A Comprehensive Introduction to Differential Geometry (Vol. 2), by Michael Spivak
+
+  斯皮瓦克的巨著实际上包括五卷，但就我的目的而言，第二卷是最相关的，因为它包括对高斯和黎曼的开创性研究的详细、深刻的分析。这一卷还包括嘉当(Cartan)的活动标架法，以及他的两个结构方程。
+
++ Differential Geometry of Curves and Surfaces (2nd edition), by Thomas Banchoff and Stephen Lovett.
+
+  虽然这里采用的数学机制是标准的，尤其是Christoffel符号，但它包含了几个高度原创的几何见解（归功于Banchoff），你不会在其他地方找到。此外，附带的网站还包含了一系列精彩的Java小程序，用于互动地探索这些概念。
+
++ Differential Geometry of Curves and Surfaces, by Kristopher Tapp.
+
+  近年来最好的、最具几何性的介绍之一。尽管其数学机制是标准的、充满Christoffel符号的丑陋方程，但仍有许多与我的方法有关的概念点。它有许多漂亮的彩色图表，许多优秀而有趣的应用，而且（像本书一样）它强调了平行输运(parallel transport)和完整(holonomy，或译为“和乐”)的重要性。强烈推荐! (注意：它只处理2-曲面，所以没有讨论黎曼张量或广义相对论。)
+
++ Curved Spaces, by P.M.H. Wilson.
+
+  这本书的前三分之二是对欧几里得、球形和双曲几何的简明、现代而又优雅的处理，采用了莫比斯变换这一强大的统一方法（与我的做法完全一样）。最后三分之一是对微分几何的介绍。
+
++ A First Course in Differential Geometry: Surfaces in Euclidean Space, by L. M. Woodward and J. Bolton.
+
+  这部作品的最后一章是我所知的对一个重要而美丽的主题的最好介绍（在本科水平上），我在本书中选择了完全忽略这个主题：极小曲面。回顾一下，这些表面是平均曲率为零的表面，类似肥皂薄膜实现：\(H \equiv \frac{k_{1}+k_{2}}{2}=0\)。本书的讨论包括1982年塞尔索-科斯塔（Celso Costa）突破性地发现了新的极小曲面（超越了平面、猫眼和螺旋体），这些曲面是封闭的，没有自交点。此外，不寻常的是，它还对\(H = const. \neq 0 \)的情况进行了深入的讨论，称为恒定平均曲率曲面（surfaces of constant mean curvature，CMC曲面）。
+
++ Elementary Differential Geomety (2nd edition), by Andrew Pressley.
+
+  一个优秀的、初级的介绍，和前一本书一样，它包含了一个非常好的关于极小表面的介绍。
+
++ A Course of Differential Geometry and Topology, by A. Mishchenko and A. Fomenko.
+
+  一本优秀的、有点高级的、范围广泛的介绍，包括黎曼几何和同调理论。它的特点是有大量出色的插图，具有Fomenko的明确无误的漫画风格。
+
++ Differential Geometry: Connections, Curvature, and Characteristic Classes, by Loring W. Tu
+
+  这是我所知道的从VDGF过渡到处理Chern特征类的更高级作品的最好的书，这在纯数学和物理学中都变得很重要。该书确实假定读者已经熟悉了微分形式，但我的第五幕提供了足够的准备。Tu还假设读者熟悉德拉姆上同调，在这里我在第五幕中的“入门”可能不够，尽管我希望我的物理和几何处理--这在其他地方很难找到--会大大方便对这个主题的进一步研究。
+
++ Lectures on Differential Geometry, by S. S. Chern, W. H. Chen, and K. S. Lam.
+
+  （中译《微分几何讲义》，陈省身）
+  这本书有356页，只包含不到10张图。我收录这本高级的作品，只有一个原因，也只有一个原因。Chern（陈省身）（这本书是根据他的讲座编写的）是20世纪最伟大的几何学家之一，因此他说的任何东西，我们都应该认真听。特别是，Chern对芬斯勒集合进行了长篇大论，这是Chern本人开创的黎曼几何学的一个巨大概括。与VGDF的唯一联系点是，Chern采用了微分形式作为他的主要工具--鉴于Chern实际上曾在嘉当本人手下学习，这并不奇怪
+** 黎曼几何
++ A Panoramic View of Riemannian Geometry, by Marcel Berger.
+
+  这是20世纪伟大的几何学家之一对这一主题的宝贵的、全景式的看法。它的重点是结果和概念，解释得很清楚、很直观，而且除了最重要的细节外，它省略了所有的细节。
+
++ Riemannian Geometry: A Beginner’s Guide (2nd edition), by Frank Morgan.
+
+  这本写得很好、图文并茂的介绍，在短短129页中包含了很多内容。别看它的副标题，我怀疑一个真正的初学者在读完我的书后会更容易处理这项工作!
+
++ Riemannian Geometry, by Manfredo P. do Carmo.
+
+  对许多深奥的定理进行了出色（但很高级）的处理，其中一些定理在很难在其他地方找到清晰的讨论。
+
++ Semi-Riemannian Geometry: With Applications to Relativity, by Barrett O’Neill
+
+  半黎曼几何学是时空的几何学，这简直是我所知道的关于这个问题的最好的数学作品。
+** 爱因斯坦的曲线时空 （广义相对论）
+
++ Gravity from the ground up, by Bernard Schutz.
+
+  第二部杰作! Schutz在他的第一部杰作（见上文）中引导了斯波克先生，而在这里，他引导了柯克船长！他采用了真正的费曼式的、物理的、直观的推理--只用了高中数学来处理重力的各个方面。他采用了真正的、费曼式的、物理的、直观的推理--只用高中数学来处理引力的所有方面。更重要的是，他成功地描绘了我们对自然界这一基本力的理解不断发展的历史和人类背景。
+
++ A Journey into Gravity and Spacetime, by John Archibald Wheeler.
+
+  这是20世纪最伟大的物理学家之一对爱因斯坦观点的深刻见解，主要是非数学性的概念阐释，也是1960年代广义相对论重生的关键人物之一（正是惠勒创造了黑洞一词）。我与这部作品有个人联系：在阅读了这部作品之后，我发现了惠勒的关键性的双曲率定律（第142页）的牛顿式纯几何证明，并寄给了他。正如序言中所解释的，我作为彭罗斯的学生有幸与惠勒（1911-2008）见过几次面，他是我生命中的一个关键人物，所以当他回信说我的证明让他很高兴时，我很激动。
+
++ A First Course in General Relativity (3rd edition), by Bernard Schutz.
+
+  截至目前，第三版还不存在，但由于我与作者的通信，我知道它即将面世。第二版已经很出色了，所以第三版会更好！特别是，我预测新版将大大扩展对引力波的处理，因为在第二版出版时，这些引力波甚至还没有被探测到，而舒茨在这个领域已经有30多年的时间了，是一个关键人物。2019年，舒茨因其预测性的理论工作（舒茨1986年的工作）而获得爱丁顿奖章，这项工作现在为从引力波数据计算哈勃常数提供了一种全新的方法。
+
++ Gravity: An Introduction to Einstein’s Gravity, by James B. Hartle.
+
+  爱因斯坦理论的最佳、最物理化（较少数学化）的介绍之一，由该理论的大师级人物撰写。
+
++ General Relativity, by Robert M. Wald.
+
+  我认为这本极好的作品是对米斯纳、索恩和惠勒的《引力》的重大更新的继承。它优雅地平衡了物理直觉和高级数学，包括在第一门课程中很少涉及的主题，如彭罗斯关于2旋子的开创性工作，以及彭罗斯和霍金的奇点定理。
+
++ General Relativity: A Geometric Approach, by Malcolm Ludvigsen.
+
+  如果你急于掌握广义相对论，你很难比这本书做得更好。它对理论的介绍非常干净、优雅、几何化和简明，而且是奇迹般地在不令人感到仓促的情况下实现的。
+
++ Einstein Gravity in a Nutshell, by A. Zee.
+
+  广义相对论的优秀介绍，涵盖了许多不寻常的主题，以生动、非正式、引人入胜和极具观点的风格写成。(我跟他是不是亲戚？)
+** （微分）形式
++ A Geometric Approach to Differential Forms, by David Bachman.
+
+  这是少数几本试图将微分形式介绍给本科生读者的勇敢的书之一。虽然它确实包括一个非常简短的微分几何的应用，但它不包括对黎曼张量或广义相对论的任何讨论。
++ A Visual Introduction to Differential Forms and Calculus on Manifolds, by Jon Pierre Fortney.
+
+  最新（也是最长）的一本书，试图将微分形式介绍给本科生读者。虽然它确实包括对电磁学的讨论，但不包括任何微分几何，因此不包括对黎曼张量或广义相对论的任何讨论。
++ Differential Forms: A Heuristic Introduction, by M. Schreiber.
+
+  最早将微分形式带给大众的尝试之一。它包含了一些很好的见解，但几乎没有任何图片! 它不包括对黎曼张量或广义相对论的任何讨论。
++ Differential Forms: A Complement to Vector Calculus, by Steven H. Weintraub.
+
+  正如书名所示，这是一个将微分形式带给高级本科多变量微积分课堂的尝试。虽然非常清晰，但它没有几何味，而且图片很少。
++ Vector Calculus, Linear Algebra, and Differential Forms: A Uniﬁed Approach (4th edition), by John H. Hubbard and Barbara Burke Hubbard
+
+  与前一本书一样，这是一次将微分形式引入高级本科多变量微积分课堂的尝试，这里的方法更为几何化，与我的方法擦肩而过。然而，必须指出的是，微分形式直到第558页才首次出现。
++ Differential Forms and Applications, by Manfredo P. do Carmo.
+
+  这本薄薄的书只有118页，（由一位非常受人尊敬的陈省身的学生所写）包含了大量的想法和信息，还有一些可爱的练习，其中一些我在这里做了借鉴（当然注明了出处！）。
+** 微分形式（在物理学中）
++ Mathematical Methods of Classical Mechanics (2nd edition), by V. I. Arnol’d.
+
+  （影印本书名为《经典力学中的数学方法》，阿诺尔德）
+  二十世纪最杰出的数学家之一的杰作。第7章是一个自成一体、优雅而有见地的微分形式介绍，然后将其应用于哈密顿力学。
+
++ Gauge Fields, Knots and Gravity, by John Baez and Javier P. Muniain.
+
+  这是一本内容广泛、极具原创性的现代电磁学、规范场和引力的介绍，其中大部分内容是用微分形式语言表达的。在其众多优秀的特点中，包括对麦克斯韦方程中霍奇二元性的作用的深刻讨论。不要忽视这本书三部分中每一部分的注释：它们包含对进一步研究的注解建议（非常像这一部分！），它们还包含迷人的历史小故事和精辟的引文。作者以友好、非正式的方式直接与读者交谈，就像对坐在他们身边的聪明朋友说话一样，而不是对着虚空讲解干巴巴的定理，这让人感到非常新鲜和有益。(当然，这也正是我在VDGF中试图做的！）。
+
++ Differential Forms and the Geometry of General Relativity, by Tevian Dray.
+
+  广义相对论的唯一完全采用微分形式作为其数学引擎的介绍。在推荐它的众多特点中我想指出的是，它包括对霍奇对偶（Hodge duality）的讨论，比我所提供的要完整得多。
+
++ The Geometry of Physics (3rd edition), by Theodore Frankel.
+
+  这是一本令人印象深刻的巨著，它几乎涵盖了上述所有书籍所涉及的每一个主题，而且还有更多的内容! 微分形式是该书的主要语言。然而特别值得注意的是它对爱因斯坦张量的几何学的独特处理。
+
++ Curvature in Mathematics and Physics, by Shlomo Sternberg.
+
+  形式是这本书的主要语言。正如书名所示，它包含了许多有趣的数学和物理学的应用。特别是，它深入处理了以下物理课题：霍奇对偶（Hodge duality）和电磁学，施瓦兹希尔德解（Schwarzschild solution）的几何和轨道的明确计算，以及极其重要的克尔解（Kerr solution）（代表一个旋转的黑洞）的几何，尽管他在实际计算曲率2形式方面止步不前。但这一列表没有完全列出对所涵盖的大量材料。警告：作者将这本书描述为适合高级本科生阅读--其实不然。但是，如果你已经掌握了我的第五幕，那么你就能从这本书里学到很多东西。
 * Footnotes
 
-[fn:1]伍鸿煦先生的他的《黎曼几何初步》里引用过的一段话，这段话是当代英国演员罗伦士奥利维亚在1947年Old Vic戏剧学院开幕典礼中，向学生致辞的一部分。
+[fn:1]伍鸿煦先生在他的《黎曼几何初步》里引用过的一段话，这段话是当代英国演员罗伦士奥利维亚在1947年Old Vic戏剧学院开幕典礼中，向学生致辞的一部分。
 
 [fn:2]见作者的书Visual Differential Geometry and Forms中的参考文献目录。
+
+[fn:3]这里列出作者252页关于与亨德森教授联系的的脚注: 当这本书接近完成时，我得知康奈尔大学的大卫-W-亨德森(David W. Henderson)教授（1998年，问题6.3）以前也发表过同样的见解。我正准备写信给他时，得知他被车撞死了，就在几天前，即2018年12月20日。因此，为了保持记录，这一发现的功劳应该归于已故的亨德森教授（除非有我不知道的先例）。无论其出处如何，我希望我在这里的可视化（亨德森没有提供）将有助于使这个简单而直观的证明更广为人知。(而且，从一个极其个人化的角度来看，优先权并不代表一切：在塞拉山脉中，在原始雪地的包围下，令人震惊的、意料之外的清晰闪光，是我生命中最快乐的时刻之一）。
