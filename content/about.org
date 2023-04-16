@@ -1,0 +1,18 @@
+---
+title: "About"
+date: 2023-06-25T00:22:08+08:00
+draft: false
+---
+
+#+latex_compiler: xelatex
+#+author: VitalyR
+#+cite_export: csl acm-siggraph.csl
+#+latex_header: \usepackage{ctex}
+#+latex_header: \usepackage{unicode-math}
+#+latex_header: \setCJKmainfont{霞鹜文楷}
+Hello，我是一只仓鼠。
++ GitHub 主页: [[https://github.com/VitalyAnkh][VitalyR]]
++ [[https://lobste.rs][lobste.rs]] 主页: [[https://lobste.rs/u/VitalyR][VitalyR]]
+
+** 友情链接
++ ??? （无？有人想被列在这里吗？）

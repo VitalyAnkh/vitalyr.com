@@ -32,7 +32,7 @@ name = "vitalyr"
 [[menu.main]]
   identifier = "about"
   name = "About"
-  url = "/about/"
+  url = "/about"
   weight = 3
 
 [params]
@@ -43,5 +43,5 @@ name = "vitalyr"
   enableHanEmph = true
   enableMathjax = true
   favicon = "/favicon.ico"
-  footnote = "Follow me on <a class=link href=https://github.com/VitalyAnkh>GitHub</a>, <a class=link href=https://twitter.com/vitalyankh>Twitter</a> or <a class=link href=/index.xml>RSS</a> | <a class=link href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a>"
-  keywords = ["Mathematics", "Category Theory", "Type Theory"]
+  footnote = "Follow me on <a class=link href=https://github.com/VitalyAnkh>GitHub</a>, <a class=link href=https://twitter.com/der_emacs>Twitter</a> or <a class=link href=/index.xml>RSS</a> | <a class=link href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a>"
+  keywords = ["Mathematics", "Category Theory", "Type Theory", "Compiler"]
