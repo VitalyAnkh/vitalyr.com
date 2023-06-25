@@ -122,7 +122,7 @@ posit 格式包括一个必须的符号位，必须的一个或多个 regime 位
 + \(1 + f = 1 + (11011101)_{2} = 1 + \frac{221}{256}\)
 数值为：\((-1)^{s} \times useed^{k} \times (1 + \frac{221}{256}) = 256^{-3} \times( {1+\frac{221}{256}})\)
 ** Quire 浮点数格式
-Quire 相当于几个 posit 浮点数的折叠，可以用来实现高精度的融合运算，具体参考 posit 标准： https://posithub.org/docs/posit_standard-2.pdf. [cite:@gustafson2017beating]
+Quire 相当于几个 posit 浮点数的折叠，可以用来实现高精度的融合运算，具体参考 posit 标准： https://posithub.org/docs/posit_standard-2.pdf . [cite:@gustafson2017beating]
 ** Posit 与 Quire 的优势
 *** 值有唯一表示
 在posit格式中，如果a和b相等， ~f（a）~ 总是等于 ~f（b）~ ，其中f是一个函数。在IEEE 754中，正零和负零的倒数分别为 \(+\infty\) 、\(-\infty\)。此外，负零等于正零。这意味着\( +\infty = -\infty\)，这是不正确的。

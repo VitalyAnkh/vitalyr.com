@@ -1,3 +1,6 @@
 [submodule "themes/hugo-theme-texify"]
 	path = themes/hugo-theme-texify
 	url = https://github.com/queensferryme/hugo-theme-texify.git
+[submodule "themes/hugo-texify2"]
+	path = themes/hugo-texify2
+	url = https://github.com/weastur/hugo-texify2.git

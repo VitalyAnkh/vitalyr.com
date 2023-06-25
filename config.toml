@@ -3,7 +3,7 @@ defaultContentLanguage = "en"
 hasCJKLanguage = true
 languageCode = "en"
 paginate = 5
-theme = "hugo-theme-texify"
+theme = "hugo-texify2"
 title = "长天高远，星月粲然"
 
 disqusShortname = ""
