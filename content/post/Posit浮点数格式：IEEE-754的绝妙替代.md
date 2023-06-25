@@ -2,7 +2,7 @@
 title = "Posit 浮点数格式：IEEE 754 的绝妙替代"
 author = ["VitalyR"]
 date = 2022-09-13T17:23:07+08:00
-lastmod = 2023-06-25T17:38:17+08:00
+lastmod = 2023-06-25T19:15:14+08:00
 draft = false
 toc = true
 +++
@@ -16,9 +16,8 @@ IEEE 754 [<a href="#citeproc_bib_item_3">2019</a>] 是用位数有限的计算�
 -   异常处理：特殊情况时的行为（如除以零、溢出等）。
 
 自1985年 IEEE 754 标准发布以来，它已经是计算机中表示实数的标准格式，被各种软硬件厂商广泛使用。但是，IEEE 754 标准的定义的浮点数有许多令人不满的地方，这里介绍John Leroy Gustafson博士提出的 posit 格式。
-![](/ox-hugo/posits-vs-ieee754.png)
 
-[<a href="#citeproc_bib_item_5">Leinster 2016</a>]
+{{< figure src="/ox-hugo/posits-vs-ieee754.png" >}}
 
 
 ## 回顾 IEEE 754 格式 {#回顾-ieee-754-格式}
@@ -30,7 +29,8 @@ IEEE 754 把浮点数分成三个部分：符号位(sign)、指数位(exponent)�
 
 符号位用来表示正负，指数位用来表示指数，尾数位用来表示尾数。IEEE 754 标准定义了四种浮点数格式：单精度（32 位）、双精度（64 位）、扩展精度（80 位）和四倍精度（128 位）。这四种格式的区别在于指数位和尾数位的位数不同.
 
-![](/ox-hugo/ieee_754_float.svg)
+{{< figure src="/ox-hugo/ieee_754_float.svg" >}}
+
 于是从浮点数的二进制表示到浮点数数值的计算方法：
 
 ![](/ox-hugo/ieee-754-repr.png)
@@ -241,7 +241,7 @@ posit 标准里定义了与 IEEE 754 的转换规则。理论上，硬件只要�
 
 ### PERCIVAL {#percival}
 
-[<a href="#citeproc_bib_item_6">Mallasén et al. 2022</a>] 这篇文章的研究者在一个 RISC-V 处理器上实现了 posit 的硬件支持，显示出30~40%的性能提升。
+[<a href="#citeproc_bib_item_5">Mallasén et al. 2022</a>] 这篇文章的研究者在一个 RISC-V 处理器上实现了 posit 的硬件支持，显示出30~40%的性能提升。
 
 
 ### Posit 和 IEEE 754 实现IRR Notch Filter的性能对比 {#posit-和-ieee-754-实现irr-notch-filter的性能对比}
@@ -261,6 +261,5 @@ posit 标准里定义了与 IEEE 754 的转换规则。理论上，硬件只要�
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a><span style="font-variant:small-caps;">Gustafson, J. and Yonemoto, I.</span> 2017. <a href="https://doi.org/10.14529/jsfi170206">Beating floating point at its own game: Posit arithmetic</a>. <i>Supercomputing frontiers and innovations</i> <i>4</i>, 71–86.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_3"></a><span style="font-variant:small-caps;"><a href="https://doi.org/10.1109/IEEESTD.2019.8766229">Ieee standard for floating-point arithmetic</a></span>. 2019. <i>Ieee std 754-2019 (revision of ieee 754-2008)</i>, 1–84.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_4"></a><span style="font-variant:small-caps;">Langroudi, H.F., Carmichael, Z., Gustafson, J.L., and Kudithipudi, D.</span> 2019. <a href="https://doi.org/10.1109/SpaceComp.2019.00011">Positnn framework: Tapered precision deep learning inference for the edge</a>. <i>2019 ieee space computing conference (scc)</i>, 53–59.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_5"></a><span style="font-variant:small-caps;">Leinster, T.</span> 2016. Basic category theory. <a href="http://arxiv.org/abs/1612.09375">http://arxiv.org/abs/1612.09375</a>.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_6"></a><span style="font-variant:small-caps;">Mallasén, D., Murillo, R., Del Barrio, A.A., Botella, G., Piñuel, L., and Prieto, M.</span> 2022. <a href="https://doi.org/10.1109/TETC.2022.3187199">Percival: Open-source posit risc-v core with quire capability</a>. <i>Ieee transactions on emerging topics in computing</i>, 1–12.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a><span style="font-variant:small-caps;">Mallasén, D., Murillo, R., Del Barrio, A.A., Botella, G., Piñuel, L., and Prieto, M.</span> 2022. <a href="https://doi.org/10.1109/TETC.2022.3187199">Percival: Open-source posit risc-v core with quire capability</a>. <i>Ieee transactions on emerging topics in computing</i>, 1–12.</div>
 </div>

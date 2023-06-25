@@ -36,7 +36,8 @@ name = "vitalyr"
   weight = 3
 
 [params]
-  customCSS = []
+  title="长天高远，星月粲然"
+  customCSS = ["/static/css/custom.css"]
   customJS = []
   dateFormat = "2006-01-02"
   description = "VitalyR's Blog Site"
