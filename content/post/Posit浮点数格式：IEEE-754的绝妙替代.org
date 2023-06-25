@@ -10,6 +10,8 @@ draft: false
 #+latex_header: \usepackage{ctex}
 #+latex_header: \usepackage{unicode-math}
 #+latex_header: \setCJKmainfont{霞鹜文楷}
+#+bibliography:  ~/Zotero/library.bib
+#+cite_export: csl
 IEEE 754 [cite:@2019ieee] 是用位数有限的计算机数据格式表示范围无限的实数的通用标准，它定义了：
 + 算术格式：二进制和十进制浮点数据集，包括有限数（包括有符号的零和次正态数）、无限数和特殊的 "非数字 "值（NaN）。
 + 交换格式：编码（比特字符串），可用于以有效和紧凑的形式交换浮点数据。

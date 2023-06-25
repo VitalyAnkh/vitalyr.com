@@ -1,7 +1,7 @@
 baseURL = "https://vitalyr.com"
-defaultContentLanguage = "en"
+defaultContentLanguage = "zh"
 hasCJKLanguage = true
-languageCode = "en"
+languageCode = "zh"
 paginate = 5
 theme = "hugo-texify2"
 title = "长天高远，星月粲然"
@@ -43,5 +43,5 @@ name = "vitalyr"
   enableHanEmph = true
   enableMathjax = true
   favicon = "/favicon.ico"
-  footnote = "Follow me on <a class=link href=https://github.com/VitalyAnkh>GitHub</a>, <a class=link href=https://twitter.com/der_emacs>Twitter</a> or <a class=link href=/index.xml>RSS</a> | <a class=link href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a>"
+  footnote = "Follow me on <a class=link href=https://github.com/VitalyAnkh>GitHub</a>, <a class=link href=https://lobste.rs/u/vitalyr>Lobsters</a> or <a class=link href=/index.xml>RSS</a> | <a class=link href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a>"
   keywords = ["Mathematics", "Category Theory", "Type Theory", "Compiler"]
