@@ -14,8 +14,5 @@ Hello，我是一只仓鼠。
 + GitHub 主页: [[https://github.com/VitalyAnkh][VitalyR]]
 + [[https://lobste.rs][lobste.rs]] 主页: [[https://lobste.rs/u/VitalyR][VitalyR]]
 
-\(f(x)\)
-$f(x)$
-
 ** 友情链接
-+ ??? （无？有人想被列在这里吗？）
++ [[https://sinofine.me][sinofine]]
