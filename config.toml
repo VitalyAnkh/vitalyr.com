@@ -37,11 +37,33 @@ name = "vitalyr"
 
 [params]
   customCSS = []
+  customJS = []
   dateFormat = "2006-01-02"
   description = "VitalyR's Blog Site"
   enableFullRSS = true
   enableHanEmph = true
   enableMathjax = true
+  enableDuckDuckGoSearchBox = true
+  toc = true
+  rootFontSize = "110%"
   favicon = "/favicon.ico"
   footnote = "Follow me on <a class=link href=https://github.com/VitalyAnkh>GitHub</a>, <a class=link href=https://lobste.rs/u/vitalyr>Lobsters</a> or <a class=link href=/index.xml>RSS</a> | <a class=link href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a>"
   keywords = ["Mathematics", "Category Theory", "Type Theory", "Compiler"]
+
+[params.commentEngine]
+code = """
+"""
+
+[params.buymeacoffee]
+code = """
+"""
+
+[params.sharingbuttons]
+facebook = false
+twitter = false
+email = false
+linkedin = false
+reddit = false
+whatsapp = false
+hackernews = true
+telegram = false

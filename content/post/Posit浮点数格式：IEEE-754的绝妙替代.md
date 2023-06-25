@@ -1,7 +1,8 @@
 +++
 title = "Posit 浮点数格式：IEEE 754 的绝妙替代"
 author = ["VitalyR"]
-lastmod = 2023-06-25T17:07:06+08:00
+date = 2022-09-13T17:23:07+08:00
+lastmod = 2023-06-25T17:24:47+08:00
 draft = false
 toc = true
 +++
