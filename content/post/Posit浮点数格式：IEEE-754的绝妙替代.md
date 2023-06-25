@@ -2,7 +2,7 @@
 title = "Posit 浮点数格式：IEEE 754 的绝妙替代"
 author = ["VitalyR"]
 date = 2022-09-13T17:23:07+08:00
-lastmod = 2023-06-25T17:32:20+08:00
+lastmod = 2023-06-25T17:38:17+08:00
 draft = false
 toc = true
 +++
@@ -142,18 +142,24 @@ IEEE 754 把浮点数分成三个部分：符号位(sign)、指数位(exponent)�
 ## Posit 浮点数格式 {#posit-浮点数格式}
 
 posit 格式包括一个必须的符号位，必须的一个或多个 regime 位，多个可选的指数位，和多个可选的尾数位。
-![](/ox-hugo/posit_format.png)
+
+{{< figure src="/ox-hugo/posit_format.png" >}}
+
 在符号位之后，regime 包括一个0或1的序列 `rr...r` ，由一个相反的位（r̄）结束。指数和尾数的位数也是动态的。一个数只在必要时包括指数和尾数。
-![](/ox-hugo/posit_regime.png)
+
+{{< figure src="/ox-hugo/posit_regime.png" >}}
 
 -   `m` 为 `regime` 位（琥珀色）中相同的位数。如果第一个比特是零，零的数量（m）代表一个负值（-m）。否则，1的数量减去1（m-1）代表一个正值（m-1）。把这个值记作 `k`.
 -   \\(useed = 2^{2^{es}}\\) ，其中 `es` 为指数位的位数。
 
 那么一个 posit 数从它的二进制表示到数值的转换公式为：
-![](/ox-hugo/posit_value.png)
+
+{{< figure src="/ox-hugo/posit_value.png" >}}
 
 假设我们有一个 4 位的 posit 格式，其中 1 位符号位，2 位指数位，2 位尾数位。那么，这些 posit 数为：
-![](/ox-hugo/posit_of_4_bits.png)
+
+{{< figure src="/ox-hugo/posit_of_4_bits.png" >}}
+
 可以看到，在一种具体的 posit 格式下，实数0只有一种表示：所有位为0.
 
 第一个位为1，其余位为0的数是一个特殊值，被称为 `NaR` （Not a Real number）。
@@ -164,7 +170,8 @@ posit 格式包括一个必须的符号位，必须的一个或多个 regime 位
 ### 例子 {#例子}
 
 对于一个 16 位的 posit 格式，其中 1 位符号位，3 位指数位(es = 3)，8 位尾数位，那么位模式 `0b0-0001-101-11011101` 表示：
-![](/ox-hugo/posit_example_1.png)
+
+{{< figure src="/ox-hugo/posit_example_1.png" >}}
 
 -   \\(s = 0\\)
 -   \\(es = 3, useed = 2^{2^{es}} = 256\\)
