@@ -2,7 +2,7 @@
 title = "Posit 浮点数格式：IEEE 754 的绝妙替代"
 author = ["VitalyR"]
 date = 2022-09-13T17:23:07+08:00
-lastmod = 2023-06-25T19:15:14+08:00
+lastmod = 2023-08-02T16:23:59+08:00
 draft = false
 toc = true
 +++
@@ -255,6 +255,8 @@ posit 标准里定义了与 IEEE 754 的转换规则。理论上，硬件只要�
 
 
 ## 参考文献 {#参考文献}
+
+## References
 
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a><span style="font-variant:small-caps;">Esmaeel, A.A., Abed, S., Mohd, B.J., and Fairouz, A.A.</span> 2022. <a href="https://doi.org/10.3390/electronics11010163">Posit vs. floating point in implementing iir notch filter by enhancing radix-4 modified booth multiplier</a>. <i>Electronics</i> <i>11</i>, 1, 1, 163.</div>
