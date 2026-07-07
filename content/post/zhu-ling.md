@@ -3,7 +3,7 @@ title = "朱令"
 author = ["VitalyR"]
 date = 2023-12-24
 lastmod = 2023-12-24T18:25:23+08:00
-draft = false
+draft = true
 toc = true
 +++
 
